@@ -67,8 +67,8 @@
     <Compile Include="Models\LocationForecast.cs" />
     <Compile Include="Models\UnixToDatetime.cs" />
     <Compile Include="Models\Wind.cs" />
-    <Compile Include="JSONModels\ListObject.cs" />
-    <Compile Include="Web collector\FetchWeather.cs" />
+    <Compile Include="JSONModels\HourlyWeather.cs" />
+    <Compile Include="Weather collector\FetchWeather.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,7 +109,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\sky.jpg" />
   </ItemGroup>

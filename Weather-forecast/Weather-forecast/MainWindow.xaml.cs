@@ -29,8 +29,12 @@ namespace Weather_forecast
         public MainWindow()
         {
             InitializeComponent();
-            
-           
+            forecast.storeLocationForecast("London");
+        }
+
+        private void tableView_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

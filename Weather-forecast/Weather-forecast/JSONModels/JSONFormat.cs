@@ -12,7 +12,7 @@ namespace Weather_forecast.Models
         public string cod;
         public string message;
         public string cnt;
-        public List<ListObject> list;
+        public List<HourlyWeather> list;
         public City city;
     }
 }

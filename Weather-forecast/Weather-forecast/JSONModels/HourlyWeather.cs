@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace Weather_forecast.OriginalModels
 {
-    public class ListObject
+    public class HourlyWeather
     {
         public double dt;
         public Main main;
-        public Object weather;
+        public List<WeatherItem> weather;
         public Clouds cloud;
         public Wind wind;
         public Sys sys;
         public string dt_text;
-
     }
 
     public struct Main {
@@ -29,6 +28,14 @@ namespace Weather_forecast.OriginalModels
         public int huminidy;
         public double temp_kf;
     }
+
+    public struct WeatherItem
+    {   
+        public int id;
+        public string main;
+        public string description;
+        public string icon;
+    } 
 
     public struct Clouds
     {

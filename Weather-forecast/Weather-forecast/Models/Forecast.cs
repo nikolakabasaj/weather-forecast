@@ -8,22 +8,28 @@ using Weather_forecast.JSONMapper;
 
 namespace Weather_forecast.Models
 {
+    /* Forecast has dictionary
+     * key: Name of location, value: forecast for location
+     */
     public class Forecast : IForecast
     {
-        public static Dictionary<string, LocationForecast> forecasts;
+        public static Dictionary<string, LocationForecast> forecast;
         public static Mapper mapper;
 
         static Forecast()
         {
-            forecasts = new Dictionary<string, LocationForecast>();
+            forecast = new Dictionary<string, LocationForecast>();
             mapper = new Mapper();
         }
 
-        public LocationForecast getLocationForecast(string cityName)
+        public void storeLocationForecast(string cityName)
         {
             LocationForecast lf = mapper.getLocationForecast(cityName);
-            forecasts[lf.Name] = lf;
-            return lf;
+            forecast[lf.Name] = lf;
+        }
+        public LocationForecast getLocationForecast(string cityName)
+        {
+            return forecast[cityName];
         }
     }
 }

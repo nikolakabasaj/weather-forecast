@@ -6,13 +6,16 @@
         xmlns:local="clr-namespace:Weather_forecast"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
+
     <Grid>
-        <!--<Grid.Background>
+
+        <Grid.Background>
             <ImageBrush ImageSource="/Images/sky.jpg" Stretch="UniformToFill"/>
-        </Grid.Background>-->
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
@@ -29,11 +32,21 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" MinHeight="0.8"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="22">
-           
-        </TextBlock>
+
+        <StackPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="9"  Margin="-15,0,24.6,-372.8">
+            <StackPanel.Resources>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Opacity" Value="0.6"/>
+                    <Setter Property="Background" Value="#16191f"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="tableView" Content="Table" Margin="10" Click="tableView_Click"
+                        Grid.Column="2" Grid.Row="2" Background="#16191f"/>
+        </StackPanel>
     </Grid>
+
+
 </Window>

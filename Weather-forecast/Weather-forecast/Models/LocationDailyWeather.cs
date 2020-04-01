@@ -19,10 +19,12 @@ namespace Weather_forecast.Models
         public int Humidity { get; set; }
         public double Temp_kf { get; set; }
         public int Cloud_all { get; set; }
-        public Wind wind { get; set; }
+        public double Wind_speed { get; set; }
+        public double Wind_degree { get; set; }
+        public string Icon { get; set; }
 
         public LocationDailyWeather(DateTime time, double temp, double feels_like, double temp_min, double temp_max, int pressure,
-            int sea_level, int ground_level, int humidity, double temp_kf, int cloud_all, double speed, double degree)
+            int sea_level, int ground_level, int humidity, double temp_kf, int cloud_all, double speed, double degree, string icon)
         {
             Time = time;
             Temp = temp;
@@ -35,8 +37,9 @@ namespace Weather_forecast.Models
             Humidity = humidity;
             Temp_kf = temp_kf;
             Cloud_all = cloud_all;
-            wind.Speed = speed;
-            wind.Degree = degree;
+            Wind_speed = speed;
+            Wind_degree = degree;
+            Icon = icon;
         }
     }
 }

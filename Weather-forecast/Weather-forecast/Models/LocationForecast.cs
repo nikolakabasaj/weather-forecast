@@ -10,5 +10,9 @@ namespace Weather_forecast.Models
     {
         public string Name { get; set; }
         public Dictionary<DateTime, LocationDailyWeather> ForecastDict { get; set; }
+        public LocationForecast()
+        {
+            ForecastDict = new Dictionary<DateTime, LocationDailyWeather>();
+        }
     }
 }
