@@ -25,11 +25,11 @@ namespace Weather_forecast.Models
         public void storeLocationForecast(string cityName)
         {
             LocationForecast lf = mapper.getLocationForecast(cityName);
-            forecast[lf.Name] = lf;
+            forecast.Add(lf.Name.ToLower(), lf);
         }
         public LocationForecast getLocationForecast(string cityName)
         {
-            return forecast[cityName];
+            return forecast[cityName.ToLower()];
         }
     }
 }

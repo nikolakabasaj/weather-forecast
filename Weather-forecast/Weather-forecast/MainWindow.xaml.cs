@@ -29,12 +29,27 @@ namespace Weather_forecast
         public MainWindow()
         {
             InitializeComponent();
-            forecast.storeLocationForecast("London");
         }
 
         private void tableView_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void graphView_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string s = searchText.Text;
+            forecast.storeLocationForecast(searchText.Text);
+            LocationForecast lf = forecast.getLocationForecast(searchText.Text);
+            string str = "05-04-2020";
+            DateTime date = DateTime.ParseExact(str, "dd-MM-yyyy", null);
+            double tmp = lf.ForecastDict[date].Temp;
+            int a = 2;
         }
     }
 }

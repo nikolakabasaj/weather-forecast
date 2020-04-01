@@ -9,19 +9,16 @@
 
 
     <Grid>
-
         <Grid.Background>
             <ImageBrush ImageSource="/Images/sky.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -29,14 +26,20 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto" MinHeight="0.8"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="9"  Margin="-15,0,24.6,-372.8">
+        <Canvas Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <TextBox x:Name="searchText" Grid.Column="5" Grid.Row="1" Width="120" Canvas.Left="508" Canvas.Top="11"></TextBox>
+            <!--
+            <Image Source="/Images/search.png" Height="23" Width="25" RenderTransformOrigin="0.162,0.681"/>
+            -->
+            <Button x:Name="searchButton" Click="searchButton_Click" Content="Search"
+                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="633" Canvas.Top="11"></Button>
+        </Canvas>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="10">
             <StackPanel.Resources>
                 <Style TargetType="StackPanel">
                     <Setter Property="Opacity" Value="0.6"/>
@@ -45,8 +48,14 @@
             </StackPanel.Resources>
             <Button x:Name="tableView" Content="Table" Margin="10" Click="tableView_Click"
                         Grid.Column="2" Grid.Row="2" Background="#16191f"/>
-        </StackPanel>
-    </Grid>
 
+            <Button x:Name="graphView" Content="Graph" Margin="10" Click="graphView_Click"
+                        Grid.Column="2" Grid.Row="2" Background="#16191f" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Grid.Column="2" Foreground="WhiteSmoke" Grid.ColumnSpan="9" Margin="2,0,36.8,0.6" Grid.RowSpan="2">
+            Hello world
+        </TextBlock>
+    </Grid>
 
 </Window>

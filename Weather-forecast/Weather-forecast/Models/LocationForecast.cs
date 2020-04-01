@@ -14,5 +14,7 @@ namespace Weather_forecast.Models
         {
             ForecastDict = new Dictionary<DateTime, LocationDailyWeather>();
         }
+
+
     }
 }
