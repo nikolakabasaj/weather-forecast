@@ -68,6 +68,8 @@
     <Compile Include="Models\UnixToDatetime.cs" />
     <Compile Include="Models\Wind.cs" />
     <Compile Include="JSONModels\HourlyWeather.cs" />
+    <Compile Include="Utility\Clock.cs" />
+    <Compile Include="Utility\CurrentCity.cs" />
     <Compile Include="Weather collector\FetchWeather.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -111,9 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\sky.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\search.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
