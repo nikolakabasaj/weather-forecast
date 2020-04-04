@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -60,14 +61,20 @@
     </ApplicationDefinition>
     <Compile Include="Interfaces\IForecast.cs" />
     <Compile Include="JSONMapper\Mapper.cs" />
+    <Compile Include="Models JSON\City.cs" />
+    <Compile Include="Models JSON\DailyForecast.cs" />
+    <Compile Include="Models JSON\JSONObject.cs" />
+    <Compile Include="Models JSON\Temp.cs" />
+    <Compile Include="Models JSON\Weather.cs" />
     <Compile Include="Models\Forecast.cs" />
     <Compile Include="JSONModels\City.cs" />
     <Compile Include="JSONModels\JSONFormat.cs" />
     <Compile Include="Models\LocationDailyWeather.cs" />
     <Compile Include="Models\LocationForecast.cs" />
-    <Compile Include="Models\UnixToDatetime.cs" />
+    <Compile Include="Utility\UnixToDatetime.cs" />
     <Compile Include="Models\Wind.cs" />
     <Compile Include="JSONModels\HourlyWeather.cs" />
+    <Compile Include="Utility\CityCoordinates.cs" />
     <Compile Include="Utility\Clock.cs" />
     <Compile Include="Utility\CurrentCity.cs" />
     <Compile Include="Weather collector\FetchWeather.cs" />
@@ -114,5 +121,6 @@
   <ItemGroup>
     <Resource Include="Images\sky.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

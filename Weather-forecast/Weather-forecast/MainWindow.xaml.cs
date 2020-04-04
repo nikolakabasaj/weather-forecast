@@ -28,13 +28,17 @@ namespace Weather_forecast
     {
         public static Forecast forecast = new Forecast();
         public Clock clock;
+        CurrentCity city = new CurrentCity();
+        LocationForecast currentCityForecast = forecast.getLocationForecast("Novi Sad");
 
         public MainWindow()
         {
             InitializeComponent();
             clock = new Clock(clockTicker);
-            CurrentCity c = new CurrentCity();
-           
+            currentCity.Content = currentCityForecast.Name;
+            temmCurrentLocation.Content = currentCityForecast.getFirstValue().Celsius;
+            icon.Content = currentCityForecast.getFirstValue().Icon;
+            measuredTime.Content = currentCityForecast.getFirstValue().getOnlyTime();
         }
 
         public void clockTicker(object sender, EventArgs e)
@@ -61,10 +65,9 @@ namespace Weather_forecast
             string s = searchText.Text;
             forecast.storeLocationForecast(searchText.Text);
             LocationForecast lf = forecast.getLocationForecast(searchText.Text);
-            string str = "05-04-2020";
-            DateTime date = DateTime.ParseExact(str, "dd-MM-yyyy ", null);
-            double tmp = lf.ForecastDict[date].Temp;
-            int a = 2;
+            string str = "05/04/2020 11:00 AM";
+            DateTime date = DateTime.ParseExact(str, "dd/MM/yyyy hh:mm tt", null);
+            double tmp = lf.ForecastDict[date].Celsius;
         }
     }
 }

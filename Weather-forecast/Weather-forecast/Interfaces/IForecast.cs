@@ -9,6 +9,9 @@ namespace Weather_forecast.Interfaces
 {
     interface IForecast
     {
-        LocationForecast getLocationForecast(string cityName);
+        LocationDailyWeather getFirstLocationDailyForecast();
+        List<LocationDailyWeather> getFirstFivePrognosis(string cityName);
+        //List<LocationDailyWeather> getForecastInDaterange();
+        LocationDailyWeather getForecastForDatetime(DateTime datetime);
     }
 }

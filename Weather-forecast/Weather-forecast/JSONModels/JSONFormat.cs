@@ -7,12 +7,12 @@ using Weather_forecast.OriginalModels;
 
 namespace Weather_forecast.Models
 {
-    public class JSONFormat
+    public class JSONForecast
     {
-        public string cod;
-        public string message;
-        public string cnt;
-        public List<HourlyWeather> list;
-        public City city;
+        public string cod { get; set; }
+        public string message { get; set; }
+        public string cnt { get; set; }
+        public List<HourlyWeather> list { get; set; }
+        public City city { get; set; }
     }
 }
