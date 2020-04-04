@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
+using Weather_forecast.Utility;
 
 namespace Weather_forecast.Models
 {
@@ -38,46 +39,17 @@ namespace Weather_forecast.Models
             Cloud_all = cloud_all;
             Wind_speed = wind_speed;
             Wind_degree = wind_degree;
-            Icon = LoadImage(icon);
+            Icon = IconMaker.LoadImage(icon);
             Celsius =  Math.Round(Kelvin - 273.15, 1);
         }
-
-        private byte[] getIcon(string iconString)
-        {
-            using (WebClient client = new WebClient())
-            {
-                string url = "http://" + $"openweathermap.org/img/wn/{iconString}@2x.png";
-                var picture = client.DownloadData(url);
-                return picture;
-            }
-        }
-
-        public Image LoadImage(string imageString)
-        {
-            byte[] imageData = getIcon(imageString);
-            if (imageData == null || imageData.Length == 0) return null;
-            var image = new BitmapImage();
-            using (var mem = new MemoryStream(imageData))
-            {
-                mem.Position = 0;
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = mem;
-                image.EndInit();
-            }
-            image.Freeze();
-
-            var controlsImage = new Image();
-            controlsImage.Source = image;
-
-            return controlsImage;
-        }
-
         public string getOnlyTime()
         {
             return Time.ToString("dd:MM hh:mm tt");
+        }
+
+        public string getOnlyDayAndTime()
+        {
+            return Time.ToString("ddd dd:MM tt");
         }
     }
 }

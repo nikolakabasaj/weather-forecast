@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Weather_forecast.Interfaces;
 using Weather_forecast.JSONMapper;
+using Weather_forecast.JSONModels.Current_forecast;
 
 namespace Weather_forecast.Models
 {
@@ -21,7 +22,10 @@ namespace Weather_forecast.Models
             forecast = new Dictionary<string, LocationForecast>();
             mapper = new Mapper();
         }
-
+        public CurrentWeather getCurrentWeather(string cityName)
+        {
+            return mapper.JSONtoCurrentCity(cityName);
+        }
         public void storeLocationForecast(string cityName)
         {
             if (!cityStored(cityName))
@@ -35,7 +39,6 @@ namespace Weather_forecast.Models
             storeLocationForecast(cityName);
             return forecast[cityName.ToLower()];
         }
-
         private bool cityStored(string cityName)
         {
             if (!forecast.ContainsKey(cityName))
@@ -43,12 +46,10 @@ namespace Weather_forecast.Models
 
             return true;
         }
-
         public LocationDailyWeather getFirstLocationDailyForecast()
         {
             return forecast.Values.First().getFirstValue();
         }
-
         public List<LocationDailyWeather> getFirstFivePrognosis(string cityName)
         {
             int cnt = 0;
@@ -62,7 +63,6 @@ namespace Weather_forecast.Models
             }
             return firstFive;
         }
-
         public LocationDailyWeather getForecastForDatetime(DateTime datetime)
         {
             throw new NotImplementedException();
