@@ -14,10 +14,10 @@ namespace Weather_forecast.Models
      */
     public class Forecast : IForecast
     {
-        public static Dictionary<string, LocationForecast> forecast;
+        public Dictionary<string, LocationForecast> forecast;
         public static Mapper mapper;
 
-        static Forecast()
+        public Forecast()
         {
             forecast = new Dictionary<string, LocationForecast>();
             mapper = new Mapper();
@@ -68,6 +68,6 @@ namespace Weather_forecast.Models
             throw new NotImplementedException();
         }
 
-       
+   
     }
 }

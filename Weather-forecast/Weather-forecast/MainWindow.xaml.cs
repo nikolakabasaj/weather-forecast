@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Weather_forecast.Components.Table;
 using Weather_forecast.JSONMapper;
 using Weather_forecast.JSONModels.Current_forecast;
 using Weather_forecast.Models;
@@ -28,28 +29,59 @@ namespace Weather_forecast
     public partial class MainWindow : Window
     {
         public static Forecast forecast = new Forecast();
-        public Clock clock;
+        private Clock clock;
 
         // ---------------------- 
-        CurrentCity city = new CurrentCity();
-        public static string name = "Novi Sad";
-        CurrentWeather currentCityWeather = forecast.getCurrentWeather(name);
+        private static CurrentCity currCity = new CurrentCity();
+        private static string currentCityName = currCity.CityName;
+        private static CurrentWeather currentCityWeather = forecast.getCurrentWeather(currentCityName);
+
         // ----------------------
+      
 
         public MainWindow()
         {
             InitializeComponent();
-            clock = new Clock(clockTicker);
-            currentCity.Content = currentCityWeather.name;
-            temmCurrentLocation.Content = currentCityWeather.main.getCelsius();
-            icon.Content = currentCityWeather.weather[0].getIcon();
-            measuredTime.Content = DateTime.Now.ToString("hh:mm tt");
+            
+            setHomePage();
+            
+        }
 
-            List<LocationDailyWeather> firstFive = forecast.getFirstFivePrognosis(name);
+        public void clockTicker(object sender, EventArgs e)
+        {   
+            clock.tickIncrement++;
+            string[] values = clock.getCurrentTime();
+            string hoursMinutes = values[0] + ":" + values[1];
+
+            clockTime.Content = hoursMinutes;
+            clockSeconds.Content = values[2];
+        }
+        private void tableView_Click(object sender, RoutedEventArgs e)
+        {
+            var table = new TableView();
+            table.Show();
+        }
+
+        private void graphView_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string s = searchText.Text;
+            forecast.storeLocationForecast(searchText.Text);
+            LocationForecast lf = forecast.getLocationForecast(searchText.Text);
+            string str = "05/04/2020 11:00 AM";
+            DateTime date = DateTime.ParseExact(str, "dd/MM/yyyy hh:mm tt", null);
+            double tmp = lf.ForecastDict[date].Celsius;
+        }
+        private void setFirstFivePrognosis()
+        {
+            List<LocationDailyWeather> firstFive = forecast.getFirstFivePrognosis(currentCityName);
             icon1.Content = firstFive[0].Icon;
             time1.Text = firstFive[0].getOnlyDayAndTime();
             temp1.Text = firstFive[0].Celsius.ToString();
-                
+
             icon2.Content = firstFive[1].Icon;
             time2.Text = firstFive[1].getOnlyDayAndTime();
             temp2.Text = firstFive[1].Celsius.ToString();
@@ -66,34 +98,23 @@ namespace Weather_forecast
             time5.Text = firstFive[4].getOnlyDayAndTime();
             temp5.Text = firstFive[4].Celsius.ToString();
         }
-
-        public void clockTicker(object sender, EventArgs e)
-        {   
-            clock.tickIncrement++;
-            string[] values = clock.getCurrentTime();
-            string hoursMinutes = values[0] + ":" + values[1];
-
-            clockTime.Content = hoursMinutes;
-            clockSeconds.Content = values[2];
-        }
-        private void tableView_Click(object sender, RoutedEventArgs e)
+        private void setCurrentCityInformation()
         {
-
+            currentCity.Content = currentCityWeather.name;
+            temmCurrentLocation.Content = currentCityWeather.main.getCelsius();
+            icon.Content = currentCityWeather.weather[0].getIcon();
+            measuredTime.Content = DateTime.Now.ToString("hh:mm tt");
         }
-
-        private void graphView_Click(object sender, RoutedEventArgs e)
+        private void setClock()
         {
-
+            clock = new Clock(clockTicker);
         }
-
-        private void searchButton_Click(object sender, RoutedEventArgs e)
+        private void setHomePage()
         {
-            string s = searchText.Text;
-            forecast.storeLocationForecast(searchText.Text);
-            LocationForecast lf = forecast.getLocationForecast(searchText.Text);
-            string str = "05/04/2020 11:00 AM";
-            DateTime date = DateTime.ParseExact(str, "dd/MM/yyyy hh:mm tt", null);
-            double tmp = lf.ForecastDict[date].Celsius;
+            setFirstFivePrognosis();
+            setCurrentCityInformation();
+            setClock();
         }
+    
     }
 }

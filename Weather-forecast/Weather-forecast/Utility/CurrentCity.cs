@@ -13,23 +13,38 @@ namespace Weather_forecast.Utility
 {
     public class CurrentCity
     {
-        public static string hostName;
-        public static string IP;
-        public CityCoordinates cityCoordinates;
+        private static Dictionary<string, string> jsonDict;
+        public string CityName;
+
 
         public CurrentCity()
         {
-            cityCoordinates = new CityCoordinates();
-            hostName = Dns.GetHostName();
-            IP = Dns.GetHostByName(hostName).AddressList[0].ToString();
-
+            jsonDict = mapCityInformation();
+            setCityName();
         }
 
-        public string getCityName()
+        private string fetchCityInformation()
         {
-            return "Belgrade";
+            using (WebClient client = new WebClient())
+            {
+                string url = string.Format("http://" + $"ip-api.com/json/{DeviceConfiguration.Public_IP}");
+                var json = client.DownloadString(url);
+                return json;
+            }
         }
 
+        private Dictionary<string, string> mapCityInformation()
+        {
+            string json = fetchCityInformation();
+            var jsonDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            return jsonDict;
+        }
 
+       private void setCityName()
+        {
+            CityName = jsonDict["city"];
+        }
+
+        
     }
 }

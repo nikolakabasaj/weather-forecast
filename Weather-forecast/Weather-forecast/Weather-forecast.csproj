@@ -59,24 +59,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="XAML Components\Table\TableView.xaml.cs">
+      <DependentUpon>TableView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IForecast.cs" />
     <Compile Include="JSONMapper\Mapper.cs" />
-    <Compile Include="JSONModels\Current forecast\Current forecast.cs" />
-    <Compile Include="JSONModels\Current forecast\Main.cs" />
-    <Compile Include="JSONModels\Current forecast\Weather.cs" />
+    <Compile Include="JSON Mapping Models\Current forecast\Current forecast.cs" />
+    <Compile Include="JSON Mapping Models\Current forecast\Main.cs" />
+    <Compile Include="JSON Mapping Models\Current forecast\Weather.cs" />
     <Compile Include="Models\Forecast.cs" />
-    <Compile Include="JSONModels\Long forecast\City.cs" />
-    <Compile Include="JSONModels\Long forecast\JSONFormat.cs" />
+    <Compile Include="JSON Mapping Models\Long forecast\City.cs" />
+    <Compile Include="JSON Mapping Models\Long forecast\JSONFormat.cs" />
     <Compile Include="Models\LocationDailyWeather.cs" />
     <Compile Include="Models\LocationForecast.cs" />
+    <Compile Include="Utility\DeviceConfiguration.cs" />
     <Compile Include="Utility\IconMaker.cs" />
     <Compile Include="Utility\UnixToDatetime.cs" />
     <Compile Include="Models\Wind.cs" />
-    <Compile Include="JSONModels\Long forecast\HourlyWeather.cs" />
-    <Compile Include="Utility\CityCoordinates.cs" />
+    <Compile Include="JSON Mapping Models\Long forecast\HourlyWeather.cs" />
     <Compile Include="Utility\Clock.cs" />
     <Compile Include="Utility\CurrentCity.cs" />
-    <Compile Include="Weather collector\FetchWeather.cs" />
+    <Compile Include="Weather WEB collector\FetchWeather.cs" />
+    <Page Include="XAML Components\Table\TableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,6 +127,8 @@
   <ItemGroup>
     <Resource Include="Images\sky.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="XAML Components\Graph\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,7 +15,7 @@ namespace Weather_forecast.JSONMapper
     public class Mapper
     {
         public static FetchWeather fetchWeather = new FetchWeather();
-        
+
         private JSONForecast JSONtoJSONObject(string cityName)
         {
             var json = fetchWeather.getJSONWeather(cityName);
@@ -34,7 +34,7 @@ namespace Weather_forecast.JSONMapper
             }
             return lf;
         }
-
+        
         public LocationDailyWeather getSingle( HourlyWeather lo)
         {
            return new LocationDailyWeather(UnixToDatetime.UnixTimeStampToDateTime(lo.dt), lo.main.temp, lo.main.temp_min, lo.main.temp_max, lo.main.pressure,
