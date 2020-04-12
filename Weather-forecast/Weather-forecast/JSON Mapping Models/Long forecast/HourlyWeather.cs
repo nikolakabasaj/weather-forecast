@@ -11,7 +11,7 @@ namespace Weather_forecast.OriginalModels
         public double dt;
         public Main main;
         public List<WeatherItem> weather;
-        public Clouds cloud;
+        public Clouds clouds;
         public Wind wind;
         public Sys sys;
         public string dt_text;
@@ -25,7 +25,7 @@ namespace Weather_forecast.OriginalModels
         public int pressure;
         public int sea_level;
         public int grnd_level;
-        public int huminidy;
+        public int humidity;
         public double temp_kf;
     }
 

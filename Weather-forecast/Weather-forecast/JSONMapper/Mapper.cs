@@ -30,15 +30,15 @@ namespace Weather_forecast.JSONMapper
             lf.Name = jsonObject.city.name;
             foreach (HourlyWeather lo in jsonObject.list) 
             {
-                lf.ForecastDict.Add(UnixToDatetime.UnixTimeStampToDateTime(lo.dt), getSingle(lo));
+                lf.ForecastDict.Add(UnixToDatetime.UnixTimeStampToDateTime(lo.dt), getSingle(lf.Name, lo));
             }
             return lf;
         }
         
-        public LocationDailyWeather getSingle( HourlyWeather lo)
+        public LocationDailyWeather getSingle(string name, HourlyWeather lo)
         {
-           return new LocationDailyWeather(UnixToDatetime.UnixTimeStampToDateTime(lo.dt), lo.main.temp, lo.main.temp_min, lo.main.temp_max, lo.main.pressure,
-            lo.main.sea_level, lo.main.huminidy, lo.cloud.all, lo.wind.speed, lo.wind.deg, lo.weather[0].icon); 
+           return new LocationDailyWeather(name, UnixToDatetime.UnixTimeStampToDateTime(lo.dt), lo.main.temp, lo.main.temp_min, lo.main.temp_max, lo.main.pressure,
+            lo.main.sea_level, lo.main.humidity, lo.clouds.all, lo.wind.speed, lo.wind.deg, lo.weather[0].icon); 
         }
     
         public CurrentWeather JSONtoCurrentCity(string cityName)

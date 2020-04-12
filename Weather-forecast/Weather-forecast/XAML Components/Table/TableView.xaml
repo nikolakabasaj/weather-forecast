@@ -5,8 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Weather_forecast.Components.Table"
         mc:Ignorable="d"
-        Title="TableView" Height="450" Width="800">
+        Title="TableView" Height="600" Width="900">
 
-    <DataGrid x:Name="tableView" Background="#FF1F202B" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=LocationDaylyForecasts}"/>
 
+    <Window.Resources>
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Setters>
+                <Setter Property="Background" Value="#313340"/>
+                <Setter Property="Foreground" Value="#e9eaf5"/>
+            </Style.Setters>
+        </Style>
+        <Style TargetType="{x:Type DataGridRowHeader}">
+            <Style.Setters>
+                <Setter Property="Background" Value="#313340"/>
+                <Setter Property="Foreground" Value="#e9eaf5"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Style.Setters>
+                <Setter Property="Background" Value="Red"></Setter>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+
+    <Grid  x:Name="MainGrid"  x:FieldModifier="public" Background="#FF1F202B" Cursor="None" Margin="-1,0,0.6,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.ColumnSpan="8" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1" x:Name="tableView"  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=LocationDaylyForecasts}" Height="500" AutoGeneratingColumn="OnAutoGeneratingColumn">
+        </DataGrid>
+        <Label Content="From:" Margin="40,15,16.6,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="3"/>
+        <Label Content="To:" Grid.Column="2" Margin="173.8,15,-148.4,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="0.504,0.5"/>
+        <ComboBox x:Name="fromDate" Grid.Column="2" HorizontalAlignment="Left" Margin="28.8,18,-108.4,0" VerticalAlignment="Top" Width="130" Background="{x:Null}"/>
+        <ComboBox x:Name="toDate" Grid.Column="2" HorizontalAlignment="Left" Margin="198.8,18,-278.4,0" VerticalAlignment="Top" Width="130"/>
+        <Button Content="Filter" Grid.Column="2" HorizontalAlignment="Left" Margin="638.8,20,-658.4,0" VerticalAlignment="Top" Width="70" Click="Filter_Click" Foreground="#FFFFE9E9">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF1B2232" Offset="0"/>
+                    <GradientStop Color="#FF393556" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button Content="Reset" Grid.Column="2" HorizontalAlignment="Left" Margin="723.8,20,-748.4,0" VerticalAlignment="Top" Width="75" Foreground="#FFFFEFEF" Click="Reset_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF971010" Offset="0"/>
+                    <GradientStop Color="#FF935353" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <TextBox x:Name="filterCity" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="421.8,20,-491.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" CaretBrush="#FF9D8F8F" Background="#FFCBB8B8"/>
+        <Label Content="City name:" Grid.Column="2" HorizontalAlignment="Left" Margin="358.8,16,-408.4,0" VerticalAlignment="Top" Width="100" Foreground="White"/>
+
+    </Grid>
 </Window>

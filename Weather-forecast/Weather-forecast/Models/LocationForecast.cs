@@ -15,12 +15,28 @@ namespace Weather_forecast.Models
         {
             ForecastDict = new Dictionary<DateTime, LocationDailyWeather>();
         }
-
+        public LocationForecast(string name, Dictionary<DateTime, LocationDailyWeather> forecastDict)
+        {
+            Name = name;
+            ForecastDict = forecastDict;
+        }
+        public HashSet<DateTime> getAllKeys()
+        {
+            return ForecastDict.Keys.ToHashSet();
+        }
         public LocationDailyWeather getFirstValue()
         {
             return ForecastDict.Values.First();
         }
-
-
+        public LocationForecast filterDateTime(DateTime from, DateTime to)
+        {
+            Dictionary<DateTime, LocationDailyWeather> retDict = ForecastDict;
+            if (from != null)
+                retDict = retDict.Where(i => from <= i.Key).ToDictionary(i => i.Key, i => i.Value);
+            if (to != null)
+                retDict = retDict.Where(i => i.Key <= to).ToDictionary(i => i.Key, i => i.Value);
+            
+            return new LocationForecast(Name,retDict);
+        }
     }
 }

@@ -42,9 +42,7 @@ namespace Weather_forecast
         public MainWindow()
         {
             InitializeComponent();
-            
             setHomePage();
-            
         }
 
         public void clockTicker(object sender, EventArgs e)
@@ -64,16 +62,16 @@ namespace Weather_forecast
 
         private void graphView_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string s = searchText.Text;
             forecast.storeLocationForecast(searchText.Text);
             LocationForecast lf = forecast.getLocationForecast(searchText.Text);
-            string str = "05/04/2020 11:00 AM";
+            string str = "12/04/2020 11:00 AM";
             DateTime date = DateTime.ParseExact(str, "dd/MM/yyyy hh:mm tt", null);
-            double tmp = lf.ForecastDict[date].Celsius;
+            //double tmp = lf.ForecastDict[date].Celsius;
         }
         private void setFirstFivePrognosis()
         {
@@ -115,6 +113,5 @@ namespace Weather_forecast
             setCurrentCityInformation();
             setClock();
         }
-    
     }
 }
