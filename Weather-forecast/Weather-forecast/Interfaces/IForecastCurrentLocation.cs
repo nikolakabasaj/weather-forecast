@@ -7,11 +7,9 @@ using Weather_forecast.Models;
 
 namespace Weather_forecast.Interfaces
 {
-    interface IForecast
+    interface IForecastCurrentLocation
     {
         LocationDailyWeather getFirstLocationDailyForecast();
         List<LocationDailyWeather> getFirstFivePrognosis(string cityName);
-        //List<LocationDailyWeather> getForecastInDaterange();
-        LocationDailyWeather getForecastForDatetime(DateTime datetime);
     }
 }

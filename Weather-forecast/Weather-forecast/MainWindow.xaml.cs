@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,12 +34,29 @@ namespace Weather_forecast
         private Clock clock;
 
         // ---------------------- 
-        private static CurrentCity currCity = new CurrentCity();
-        private static string currentCityName = currCity.CityName;
+        private static CurrentCity currCity = new CurrentCity();                                        // Get city from API
+        private static string currentCityName = currCity.CityName;   
         private static CurrentWeather currentCityWeather = forecast.getCurrentWeather(currentCityName);
 
         // ----------------------
-      
+        private DispatcherTimer messageTimer = new DispatcherTimer();
+        private bool _informationMessage;
+        private bool InformationMessage
+        {
+            get { return _informationMessage; }
+            set
+            {
+                if(_informationMessage != value)
+                {
+                    _informationMessage = value;
+                    Thread startTick = new Thread(TimerStart);
+                    startTick.Start();
+                }
+               
+            }
+        }
+        // ----------------------
+
 
         public MainWindow()
         {
@@ -54,24 +73,64 @@ namespace Weather_forecast
             clockTime.Content = hoursMinutes;
             clockSeconds.Content = values[2];
         }
+       
         private void tableView_Click(object sender, RoutedEventArgs e)
         {
-            var table = new TableView();
-            table.Show();
+            if (forecast.locationForecast.Count != 0)
+            {
+                var table = new TableView();
+                table.Show();
+            }
+            else
+            {
+                informationLabel.Content = "There is no data in table!";
+                InformationMessage = true;
+            }  
         }
 
         private void graphView_Click(object sender, RoutedEventArgs e)
         {
             
         }
+
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            string s = searchText.Text;
-            forecast.storeLocationForecast(searchText.Text);
-            LocationForecast lf = forecast.getLocationForecast(searchText.Text);
-            string str = "12/04/2020 11:00 AM";
-            DateTime date = DateTime.ParseExact(str, "dd/MM/yyyy hh:mm tt", null);
-            //double tmp = lf.ForecastDict[date].Celsius;
+            string cityName = searchText.Text;
+            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            try
+            {
+                LocationForecast lf = forecast.getLocationForecast(cityName);
+                
+                searchText.Clear();
+                informationLabel.Content = "City '" + textInfo.ToTitleCase(cityName) + "' added";
+            }
+            catch
+            {
+                informationLabel.Content = "City '" + textInfo.ToTitleCase(cityName) + "'does not exist!";
+            }
+            InformationMessage = true;
+        }
+        private void TimerStart()
+        {
+            if (InformationMessage)
+            {
+                Thread.Sleep(1000);
+                messageTimer.Interval = TimeSpan.FromMilliseconds(30);
+                messageTimer.Tick += dt_Tick;
+                messageTimer.Start();
+            }
+        }
+
+        private void dt_Tick(object sender, object e)
+        {
+            informationLabel.Opacity -= 0.11;
+            if (informationLabel.Opacity <= 0) {
+                InformationMessage = false;
+                messageTimer.Stop();
+
+                informationLabel.Opacity = 1.0;
+                informationLabel.Content = "";
+            }
         }
         private void setFirstFivePrognosis()
         {

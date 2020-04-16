@@ -18,3 +18,7 @@ C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-fo
 C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csproj.CopyComplete
 C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\XAML Components\Table\TableView.g.cs
 C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\XAML Components\Table\TableView.baml
+C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\System.Windows.Controls.DataVisualization.Toolkit.dll
+C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\System.Windows.Controls.DataVisualization.Toolkit.xml
+C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\XAML Components\Graph\GraphView.g.cs
+C:\Users\nikol\Desktop\Projekat HCI\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\XAML Components\Graph\GraphView.baml

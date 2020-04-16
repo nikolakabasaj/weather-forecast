@@ -1,11 +1,11 @@
-﻿<Window x:Class="Weather_forecast.Components.Table.TableView"
+﻿<Window  ResizeMode="NoResize" x:Class="Weather_forecast.Components.Table.TableView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Weather_forecast.Components.Table"
         mc:Ignorable="d"
-        Title="TableView" Height="600" Width="900">
+        Title="Table" Height="600" Width="900">
 
 
     <Window.Resources>
@@ -21,18 +21,80 @@
                 <Setter Property="Foreground" Value="#e9eaf5"/>
             </Style.Setters>
         </Style>
-        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
-            <Style.Setters>
-                <Setter Property="Background" Value="Red"></Setter>
-            </Style.Setters>
+        <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientBrush.GradientStops>
+                <GradientStopCollection>
+                    <GradientStop Color="#FF384F77" Offset="0.0"/>
+                    <GradientStop Color="#FF14203C" Offset="1.0"/>
+                </GradientStopCollection>
+            </GradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="WindowBackgroundBrush" Opacity="0.9" Color="#FF606E6F" />
+
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2"
+                  Background="{StaticResource NormalBrush}"
+                  BorderThickness="1" />
+                                <Border  Grid.Column="0" CornerRadius="2,0,0,2"  Margin="1" 
+                  Background="{StaticResource WindowBackgroundBrush}" BorderThickness="0,0,1,0" />
+                                <Path   x:Name="Arrow"  Grid.Column="1"  HorizontalAlignment="Center"
+                  VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+                            </Grid>
+                        </ControlTemplate>
+
+                        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="TextBox">
+                            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+                        </ControlTemplate>
+
+        <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton  Name="ToggleButton" Template="{StaticResource ComboBoxToggleButton}" 
+                        Grid.Column="2" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                        ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Margin="3,3,23,3"
+                    VerticalAlignment="Center" HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox" Style="{x:Null}"  Template="{StaticResource ComboBoxTextBox}" 
+                        HorizontalAlignment="Left"  VerticalAlignment="Center"  Margin="3,3,23,3" Focusable="False" 
+                        Background="Transparent" Visibility="Hidden"  IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup  Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}"
+                    AllowsTransparency="True"  Focusable="False" PopupAnimation="Slide">
+                                <Grid 
+                        Name="DropDown" SnapsToDevicePixels="True"  MinWidth="{TemplateBinding ActualWidth}"
+                        MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border  x:Name="DropDownBorder" Background="{StaticResource WindowBackgroundBrush}"
+                        BorderThickness="1"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
         </Style>
+
     </Window.Resources>
 
-    <Grid  x:Name="MainGrid"  x:FieldModifier="public" Background="#FF1F202B" Cursor="None" Margin="-1,0,0.6,0">
+    <Grid  x:Name="MainGrid"  x:FieldModifier="public" Background="#FF1F202B" Margin="-1,0,-11.4,0.4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="auto" MinWidth="784.8"/>
+            <ColumnDefinition Width="0.8"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -40,30 +102,38 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.ColumnSpan="8" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1" x:Name="tableView"  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=LocationDaylyForecasts}" Height="500" AutoGeneratingColumn="OnAutoGeneratingColumn">
-        </DataGrid>
-        <Label Content="From:" Margin="40,15,16.6,0" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="3"/>
-        <Label Content="To:" Grid.Column="2" Margin="173.8,15,-148.4,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="0.504,0.5"/>
-        <ComboBox x:Name="fromDate" Grid.Column="2" HorizontalAlignment="Left" Margin="28.8,18,-108.4,0" VerticalAlignment="Top" Width="130" Background="{x:Null}"/>
-        <ComboBox x:Name="toDate" Grid.Column="2" HorizontalAlignment="Left" Margin="198.8,18,-278.4,0" VerticalAlignment="Top" Width="130"/>
-        <Button Content="Filter" Grid.Column="2" HorizontalAlignment="Left" Margin="638.8,20,-658.4,0" VerticalAlignment="Top" Width="70" Click="Filter_Click" Foreground="#FFFFE9E9">
+        <DataGrid Grid.Row="2" x:Name="tableView"  ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=LocationDaylyForecasts}" AutoGeneratingColumn="OnAutoGeneratingColumn" Margin="0.4,113.8,4.4,-438.4" Grid.Column="1" Background="#FF1F202B"/>
+        <Label Content="From:" Margin="5.4,11,251.4,0" VerticalAlignment="Top" Foreground="White" Height="26" Grid.Column="1"/>
+        <Label Content="To:" Margin="20.4,0.6,240.4,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="0.504,0.5" Grid.Row="1" Height="26" Grid.RowSpan="2" Grid.Column="1"/>
+        <ComboBox x:Name="fromDate" Grid.Column="1" HorizontalAlignment="Left" Margin="50.4,14,0,0" VerticalAlignment="Top" Width="130" Background="#FF686060" OpacityMask="#FF766E6E" Height="22"/>
+        <ComboBox x:Name="toDate" Grid.Column="1" HorizontalAlignment="Left" Margin="49.4,2.8,0,0" VerticalAlignment="Top" Width="130" Grid.Row="2" Height="22"/>
+        <Button Content="Filter" Grid.Column="1" HorizontalAlignment="Left" Margin="204.4,29,0,0" VerticalAlignment="Top" Width="70" Click="Filter_Click" Foreground="#FFBDC1D3" Height="19">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF1B2232" Offset="0"/>
-                    <GradientStop Color="#FF393556" Offset="1"/>
+                    <GradientStop Color="#FF274891" Offset="0"/>
+                    <GradientStop Color="#FF485A6E" Offset="1"/>
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button Content="Reset" Grid.Column="2" HorizontalAlignment="Left" Margin="723.8,20,-748.4,0" VerticalAlignment="Top" Width="75" Foreground="#FFFFEFEF" Click="Reset_Click">
+        <Button Content="Reset" Grid.Column="1" HorizontalAlignment="Left" Margin="204.4,18.8,0,0" VerticalAlignment="Top" Width="75" Foreground="#FFEBC8C8" Click="Reset_Click" Grid.Row="2" Height="19">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF971010" Offset="0"/>
-                    <GradientStop Color="#FF935353" Offset="1"/>
+                    <GradientStop Color="#FF733A3A" Offset="1"/>
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <TextBox x:Name="filterCity" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="421.8,20,-491.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" CaretBrush="#FF9D8F8F" Background="#FFCBB8B8"/>
-        <Label Content="City name:" Grid.Column="2" HorizontalAlignment="Left" Margin="358.8,16,-408.4,0" VerticalAlignment="Top" Width="100" Foreground="White"/>
+        <TextBox x:Name="filterCity" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="52.4,42.8,0,-15.4" TextWrapping="Wrap" VerticalAlignment="Top" Width="128" CaretBrush="#FF9D8F8F" Background="#FFCBB8B8" OpacityMask="#FFD9D9D9" Grid.Row="2"/>
+        <Label Content="City name:" HorizontalAlignment="Left" Margin="35,38.8,0,-14.4" VerticalAlignment="Top" Width="105" Foreground="White" Grid.Row="2" Height="26" Grid.ColumnSpan="2" RenderTransformOrigin="0.5,0.5"/>
+        <TextBlock Foreground="White" Text="Cities:" Grid.Column="1" Margin="514.6,15,220.2,10.4"/>
+        <ComboBox x:Name="graphType" HorizontalAlignment="Left" Margin="555.4,6.8,0,0" VerticalAlignment="Top" Width="141" Background="#FF686060" OpacityMask="#FF766E6E" Height="22" Grid.Column="1" Grid.Row="2"/>
+        <TextBlock Foreground="White" Text="Graph:" Grid.Column="1" Margin="509.6,3.8,225.2,21.6" Grid.Row="2"/>
+        <Button Content="Graph" Grid.Column="1" HorizontalAlignment="Left" Margin="710.4,35,0,0" VerticalAlignment="Top" Width="60" Foreground="#FFEBC8C8" Height="19" Grid.RowSpan="3" Background="#FF2F313F" Click="Graph_View_Click" />
+        <ComboBox  Height="25" x:Name="cmb" Grid.Column="1" Margin="555.4,10,89.4,0" VerticalAlignment="Top">
+            <ListBox HorizontalContentAlignment="Center" x:Name="listBox" SelectionMode="Multiple">
 
+            </ListBox>
+        </ComboBox>
+        
     </Grid>
 </Window>

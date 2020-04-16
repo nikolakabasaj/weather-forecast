@@ -41,6 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Device" />
+    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Controls.DataVisualization.Toolkit.4.0.0.0\lib\net40-Client\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,10 +62,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="XAML Components\Graph\GraphView.xaml.cs">
+      <DependentUpon>GraphView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XAML Components\Table\TableView.xaml.cs">
       <DependentUpon>TableView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IForecast.cs" />
+    <Compile Include="Interfaces\IForecastCurrentLocation.cs" />
     <Compile Include="JSONMapper\Mapper.cs" />
     <Compile Include="JSON Mapping Models\Current forecast\Current forecast.cs" />
     <Compile Include="JSON Mapping Models\Current forecast\Main.cs" />
@@ -80,6 +86,10 @@
     <Compile Include="Utility\Clock.cs" />
     <Compile Include="Utility\CurrentCity.cs" />
     <Compile Include="Weather WEB collector\FetchWeather.cs" />
+    <Page Include="XAML Components\Graph\GraphView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML Components\Table\TableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -127,8 +137,6 @@
   <ItemGroup>
     <Resource Include="Images\sky.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="XAML Components\Graph\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

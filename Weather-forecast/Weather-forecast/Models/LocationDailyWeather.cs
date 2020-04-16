@@ -67,5 +67,16 @@ namespace Weather_forecast.Models
         {
             return Time.ToString("ddd dd:MM tt");
         }
+
+        public int getValueByAttributeName(string name)
+        {
+            foreach (var prop in this.GetType().GetProperties()) {
+                if (prop.Name == name) {
+                    return (int) prop.GetValue(prop);
+                }
+            }
+               
+            return 0;        
+        }
     }
 }

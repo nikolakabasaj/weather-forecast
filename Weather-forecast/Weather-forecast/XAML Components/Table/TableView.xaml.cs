@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Weather_forecast.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Weather_forecast.XAML_Components.Graph;
 
 namespace Weather_forecast.Components.Table
 {
@@ -23,18 +24,20 @@ namespace Weather_forecast.Components.Table
     public partial class TableView : Window
     {
         public ObservableCollection<LocationDailyWeather> LocationDaylyForecasts { get; set; }
+        public static string[] graphTypes = { "Temperature", "Pressure", "Visibility", "Humidity" };
 
         public TableView()
         {
             LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>();
             initializeRows();
-            initializeComponents();
+            initializeAllComponents();
             InitializeComponent();
-            setComponents();
+            setComponentsValues();
         }
 
         private void initializeRows()
         {
+           
             foreach (string key in MainWindow.forecast.locationForecast.Keys)
                 addLocationDailyWeather(MainWindow.forecast.locationForecast[key]);
         }
@@ -54,19 +57,25 @@ namespace Weather_forecast.Components.Table
             }
         }
         
-        private void initializeComponents()
+        private void initializeAllComponents()
         {
             fromDate = new ComboBox();
             toDate = new ComboBox();
+
+            graphType = new ComboBox(); 
         }
         
-        private void setComponents()
+        private void setComponentsValues()
         {
-            fromDate.Text = "Select date from";
-            toDate.Text = "Select date to";
-
             fromDate.ItemsSource = MainWindow.forecast.getAllDates();
             toDate.ItemsSource = MainWindow.forecast.getAllDates();
+
+            graphType.ItemsSource = graphTypes;            
+            listBox.ItemsSource = MainWindow.forecast.getAllCities(); 
+
+            fromDate.SelectedItem = MainWindow.forecast.getAllDates().First();
+            toDate.SelectedItem = MainWindow.forecast.getAllDates().Last();
+            graphType.ItemsSource = graphTypes;
         }
 
         private void Filter_Click(object sender, RoutedEventArgs e)
@@ -85,6 +94,17 @@ namespace Weather_forecast.Components.Table
             initializeRows();
         }
 
+        private void Graph_View_Click(object sender, RoutedEventArgs e)
+        {
+            string graphDataType = adjustGraphTypeNames(graphType.SelectedItem as string);
+            List<string> listBoxItems = new  List<string>();
+            foreach (string s in listBox.SelectedItems)
+                listBoxItems.Add(s);
+     
+            GraphView graph = new GraphView();
+            graph.setComponents(graphDataType, listBoxItems.ToArray());
+            graph.Show();
+        }
         private ObservableCollection<LocationDailyWeather> applyFilter(Nullable<DateTime> from, Nullable<DateTime> to, string cityName)
         {
             if (from != null)
@@ -95,5 +115,25 @@ namespace Weather_forecast.Components.Table
                 LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Name.ToLower().Contains(cityName.ToLower())));
             return LocationDaylyForecasts;
         }
+
+        private string adjustGraphTypeNames(string typeName)
+        {
+            string retString = "";
+            if (typeName == "Temperature")
+            {
+                retString = "Celsius";
+            }
+            else if(typeName == "Visibility")
+            {
+                retString = "Cloud_all";
+            }
+            else
+            {
+                retString = typeName;
+            }
+
+            return retString;
+        }
+        
     }
 }
