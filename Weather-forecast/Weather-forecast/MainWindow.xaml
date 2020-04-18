@@ -41,7 +41,19 @@
                 <TextBlock x:Name="messagePopup" Margin="-15,-20,14.8,19.8" ></TextBlock>
             </Popup>
             <Button x:Name="searchButton" Click="searchButton_Click" 
-                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="725" Canvas.Top="14" Background="#FFDDDDDD" Foreground="White" Height="21" Width="22">
+                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="725" Canvas.Top="14" Background="{x:Null}" Foreground="White" Height="21" Width="22">
+                <StackPanel Height="26">
+                    <Image Source="/Images/add.png" Height="14" Width="19" RenderTransformOrigin="0.544,0.451" OpacityMask="Black" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform AngleX="-0.01"/>
+                                <RotateTransform Angle="-0.196"/>
+                                <TranslateTransform X="-0.004" Y="-0.004"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </StackPanel>
             </Button>
         </Canvas>
 

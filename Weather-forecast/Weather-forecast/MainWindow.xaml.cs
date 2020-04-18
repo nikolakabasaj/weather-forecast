@@ -87,7 +87,7 @@ namespace Weather_forecast
         {
             if (InformationMessage)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 messageTimer.Interval = TimeSpan.FromMilliseconds(30);
                 messageTimer.Tick += dt_Tick;
                 messageTimer.Start();
@@ -111,13 +111,13 @@ namespace Weather_forecast
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string cityName = searchText.Text;
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+           
             try
             {
                 LocationForecast lf = forecast.getLocationForecast(cityName);
                 
                 searchText.Clear();
-                informationLabel.Content = $"The city '{textInfo.ToTitleCase(cityName)}' was added to the table!";
+                informationLabel.Content = $"The city '{StringHandler.capitalize(lf.Name)}' was added to the table!";
             }
             catch
             {
@@ -125,13 +125,13 @@ namespace Weather_forecast
                     informationLabel.Content = "You did not enter a city name!";
                 }
                 else {
-                    informationLabel.Content = "City '" + textInfo.ToTitleCase(cityName) + "'does not exist!";
+                    informationLabel.Content = $"City '{StringHandler.capitalize(cityName)}'does not exist!";
                 }
                 
             }
             InformationMessage = true;
         }
-           
+
         private void setFirstFivePrognosis()
         {
             List<LocationDailyWeather> firstFive = forecast.getFirstFivePrognosis(currentCityName);

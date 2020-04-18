@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Weather_forecast.Interfaces;
 using Weather_forecast.JSONMapper;
 using Weather_forecast.JSONModels.Current_forecast;
+using Weather_forecast.Utility;
 
 namespace Weather_forecast.Models
 {
@@ -28,7 +29,7 @@ namespace Weather_forecast.Models
         }
         public HashSet<string> getAllCities()
         {
-            return locationForecast.Keys.ToHashSet<string>();
+            return locationForecast.Keys.Select(k => StringHandler.capitalize(k)).ToHashSet<string>();
         }
         public HashSet<DateTime> getAllDates()
         {
@@ -66,17 +67,18 @@ namespace Weather_forecast.Models
         }
         public LocationForecast getLocationForecast(string cityName)
         {
-            storeLocationForecast(cityName);
-            LocationForecast lf = locationForecast[cityName.ToLower()];
-            return lf;
+            string UTFname = storeLocationForecast(cityName);
+            return locationForecast[UTFname];
         }
-        public void storeLocationForecast(string cityName)
+        public string storeLocationForecast(string cityName)
         {
             if (!isCityStored(cityName))
             {
                 LocationForecast lf = mapper.getLocationForecast(cityName);
-                locationForecast.Add(lf.Name.ToLower(), lf);
+                cityName = lf.Name.ToLower();
+                locationForecast.Add(cityName, lf);
             }
+            return cityName;
         }
         private bool isCityStored(string cityName)
         {

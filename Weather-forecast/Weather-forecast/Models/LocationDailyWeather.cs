@@ -42,6 +42,7 @@ namespace Weather_forecast.Models
         public string StringIcon { get; set; }
         public Image Icon { get; set; }
 
+
         public LocationDailyWeather() { }
         public LocationDailyWeather(string name, DateTime time, double temp, double temp_min, double temp_max, double pressure,
             int sea_level, int humidity, int cloud_all, double wind_speed, double wind_degree, string icon)
@@ -60,11 +61,12 @@ namespace Weather_forecast.Models
             StringIcon = icon;
             Celsius =  Math.Round(Kelvin - 273.15, 1);
         }
-
+      
         public void loadIcon()
         {
             Icon = IconHandler.LoadImage(StringIcon);
         }
+        
         public string getOnlyTime()
         {
             return Time.ToString("dd:MM hh:mm tt");

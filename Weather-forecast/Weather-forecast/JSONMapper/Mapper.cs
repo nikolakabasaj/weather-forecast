@@ -29,7 +29,7 @@ namespace Weather_forecast.JSONMapper
             JSONForecast jsonObject = JSONtoJSONObject(cityName);
             LocationForecast lf = new LocationForecast();
 
-            lf.Name = jsonObject.city.name;
+            lf.Name = StringHandler.toUTFString(jsonObject.city.name);
             foreach(var lo in jsonObject.list)
                 lf.ForecastDict.Add(UnixToDatetime.UnixTimeStampToDateTime(lo.dt), getSingle(lf.Name, lo));
             
@@ -47,5 +47,6 @@ namespace Weather_forecast.JSONMapper
             var json = fetchWeather.getCurrentWeather(cityName);
             return JsonConvert.DeserializeObject<CurrentWeather>(json);
         }
+
     }
 }

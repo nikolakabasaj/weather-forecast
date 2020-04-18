@@ -17,6 +17,7 @@ using System.ComponentModel;
 using Weather_forecast.XAML_Components.Graph;
 using System.Threading;
 using System.Windows.Threading;
+using Weather_forecast.Utility;
 
 namespace Weather_forecast.Components.Table
 {
@@ -83,13 +84,15 @@ namespace Weather_forecast.Components.Table
             fromDate.SelectedItem = MainWindow.forecast.getAllDates().First();
             toDate.SelectedItem = MainWindow.forecast.getAllDates().Last();
             graphType.ItemsSource = graphParameters;
+
+            cityToDelete.ItemsSource = MainWindow.forecast.getAllCities();
         }
 
         private void Filter_Click(object sender, RoutedEventArgs e)
         {
             Nullable<DateTime> from = fromDate.SelectedItem as Nullable<DateTime>;
             Nullable<DateTime> to = toDate.SelectedItem as Nullable<DateTime>;
-            string cityName = filterCity.Text;
+            string cityName = filterCity.Text.ToLower();
 
             tableView.ItemsSource = null;
             tableView.ItemsSource = applyFilter(from, to, cityName);
@@ -101,12 +104,36 @@ namespace Weather_forecast.Components.Table
             initializeTableRows();
         }
 
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            string cityName = cityToDelete.SelectedItem as string;
+
+            if(cityName != null) {
+                cityName = cityName.ToLower();
+
+                tableView.ItemsSource = null;
+                tableView.ItemsSource = delete(cityName);
+              
+                MainWindow.forecast.locationForecast.Remove(cityName);
+                cityToDelete.ItemsSource = MainWindow.forecast.getAllCities();
+                listBox.ItemsSource = MainWindow.forecast.getAllCities();
+
+                messageInformation.Content = $"{ StringHandler.capitalize(cityName) } is successfully removed from table!";
+            }
+            else
+            {
+                messageInformation.Content = "You did not choose city to delete!";
+            }
+
+            IsMessageVisible = true;
+        }
+
         private void Graph_View_Click(object sender, RoutedEventArgs e)
         {
             string graphDataType = adjustGraphTypeNames(graphType.SelectedItem as string);
             List<string> listBoxItems = new  List<string>();
             foreach (string s in listBox.SelectedItems)
-                listBoxItems.Add(s);
+                listBoxItems.Add(s.ToLower());
 
 
             if (graphDataType == "" || listBoxItems.Count == 0)
@@ -122,6 +149,11 @@ namespace Weather_forecast.Components.Table
             }
         }
         
+        private ObservableCollection<LocationDailyWeather> delete(string cityName) {
+            LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Name != StringHandler.capitalize(cityName)));
+            return LocationDaylyForecasts;
+        }
+
         private ObservableCollection<LocationDailyWeather> applyFilter(Nullable<DateTime> from, Nullable<DateTime> to, string cityName)
         {
             if (from != null)
@@ -137,7 +169,7 @@ namespace Weather_forecast.Components.Table
         {
             if (IsMessageVisible)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 messageTimer.Interval = TimeSpan.FromMilliseconds(30);
                 messageTimer.Tick += dt_Tick;
                 messageTimer.Start();
