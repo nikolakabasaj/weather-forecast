@@ -12,7 +12,7 @@ namespace Weather_forecast.Models_JSON
 
         public Image getIcon()
         {
-            return IconMaker.LoadImage(icon);
+            return IconHandler.LoadImage(icon);
         }
     }
 }

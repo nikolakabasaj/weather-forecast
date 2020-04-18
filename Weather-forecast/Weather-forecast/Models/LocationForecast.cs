@@ -4,13 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Weather_forecast.Models_JSON;
+using Weather_forecast.Utility;
 
 namespace Weather_forecast.Models
 {
     public class LocationForecast
     {
         public string Name { get; set; }
+
         public Dictionary<DateTime, LocationDailyWeather> ForecastDict { get; set; }
+        public void loadIcons()
+        {
+            foreach (LocationDailyWeather ldw in ForecastDict.Values)
+                ldw.Icon = IconHandler.LoadImage(ldw.StringIcon);
+        }
         public LocationForecast()
         {
             ForecastDict = new Dictionary<DateTime, LocationDailyWeather>();

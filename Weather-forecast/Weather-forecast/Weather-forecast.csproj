@@ -79,7 +79,7 @@
     <Compile Include="Models\LocationDailyWeather.cs" />
     <Compile Include="Models\LocationForecast.cs" />
     <Compile Include="Utility\DeviceConfiguration.cs" />
-    <Compile Include="Utility\IconMaker.cs" />
+    <Compile Include="Utility\IconHandler.cs" />
     <Compile Include="Utility\UnixToDatetime.cs" />
     <Compile Include="Models\Wind.cs" />
     <Compile Include="JSON Mapping Models\Long forecast\HourlyWeather.cs" />

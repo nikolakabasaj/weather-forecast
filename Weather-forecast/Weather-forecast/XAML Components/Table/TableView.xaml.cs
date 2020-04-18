@@ -15,6 +15,8 @@ using Weather_forecast.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Weather_forecast.XAML_Components.Graph;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Weather_forecast.Components.Table
 {
@@ -24,27 +26,32 @@ namespace Weather_forecast.Components.Table
     public partial class TableView : Window
     {
         public ObservableCollection<LocationDailyWeather> LocationDaylyForecasts { get; set; }
-        public static string[] graphTypes = { "Temperature", "Pressure", "Visibility", "Humidity" };
+        private static string[] graphParameters = { "Temperature", "Pressure", "Visibility", "Humidity" };
+        private bool _isMessageVisible;
+        private DispatcherTimer messageTimer = MainWindow.messageTimer;
+       
+        private bool IsMessageVisible
+        {
+            get { 
+                return _isMessageVisible;
+            }
+            set {
+                if (_isMessageVisible != value)
+                {
+                    _isMessageVisible = value;
+                    Thread startTick = new Thread(TimerStart);
+                    startTick.Start();
+                }
+            }
+        }
 
         public TableView()
         {
             LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>();
-            initializeRows();
+            initializeTableRows();
             initializeAllComponents();
             InitializeComponent();
             setComponentsValues();
-        }
-
-        private void initializeRows()
-        {
-           
-            foreach (string key in MainWindow.forecast.locationForecast.Keys)
-                addLocationDailyWeather(MainWindow.forecast.locationForecast[key]);
-        }
-       
-        private void addLocationDailyWeather(LocationForecast lf) {
-            foreach(LocationDailyWeather ldw in lf.ForecastDict.Values)
-                LocationDaylyForecasts.Add(ldw);
         }
 
         private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -70,12 +77,12 @@ namespace Weather_forecast.Components.Table
             fromDate.ItemsSource = MainWindow.forecast.getAllDates();
             toDate.ItemsSource = MainWindow.forecast.getAllDates();
 
-            graphType.ItemsSource = graphTypes;            
+            graphType.ItemsSource = graphParameters;            
             listBox.ItemsSource = MainWindow.forecast.getAllCities(); 
 
             fromDate.SelectedItem = MainWindow.forecast.getAllDates().First();
             toDate.SelectedItem = MainWindow.forecast.getAllDates().Last();
-            graphType.ItemsSource = graphTypes;
+            graphType.ItemsSource = graphParameters;
         }
 
         private void Filter_Click(object sender, RoutedEventArgs e)
@@ -91,7 +98,7 @@ namespace Weather_forecast.Components.Table
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             LocationDaylyForecasts.Clear();
-            initializeRows();
+            initializeTableRows();
         }
 
         private void Graph_View_Click(object sender, RoutedEventArgs e)
@@ -100,11 +107,21 @@ namespace Weather_forecast.Components.Table
             List<string> listBoxItems = new  List<string>();
             foreach (string s in listBox.SelectedItems)
                 listBoxItems.Add(s);
-     
-            GraphView graph = new GraphView();
-            graph.setComponents(graphDataType, listBoxItems.ToArray());
-            graph.Show();
+
+
+            if (graphDataType == "" || listBoxItems.Count == 0)
+            {
+                messageInformation.Content = "You did not choose values for graph!";
+                IsMessageVisible = true;
+            }
+            else
+            {
+                GraphView graph = new GraphView();
+                graph.setComponents(graphDataType, listBoxItems.ToArray());
+                graph.Show();
+            }
         }
+        
         private ObservableCollection<LocationDailyWeather> applyFilter(Nullable<DateTime> from, Nullable<DateTime> to, string cityName)
         {
             if (from != null)
@@ -114,6 +131,30 @@ namespace Weather_forecast.Components.Table
             if (cityName != null && !cityName.Equals(""))
                 LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Name.ToLower().Contains(cityName.ToLower())));
             return LocationDaylyForecasts;
+        }
+
+        private void TimerStart()
+        {
+            if (IsMessageVisible)
+            {
+                Thread.Sleep(1000);
+                messageTimer.Interval = TimeSpan.FromMilliseconds(30);
+                messageTimer.Tick += dt_Tick;
+                messageTimer.Start();
+            }
+        }
+
+        private void dt_Tick(object sender, object e)
+        {
+            messageInformation.Opacity -= 0.11;
+            if (messageInformation.Opacity <= 0)
+            {
+                IsMessageVisible = false;
+                messageTimer.Stop();
+
+                messageInformation.Opacity = 1.0;
+                messageInformation.Content = "";
+            }
         }
 
         private string adjustGraphTypeNames(string typeName)
@@ -134,6 +175,18 @@ namespace Weather_forecast.Components.Table
 
             return retString;
         }
-        
+
+        private void initializeTableRows()
+        {
+
+            foreach (string key in MainWindow.forecast.locationForecast.Keys)
+                addLocationDailyWeatherToForecast(MainWindow.forecast.locationForecast[key]);
+        }
+
+        private void addLocationDailyWeatherToForecast(LocationForecast lf)
+        {
+            foreach (LocationDailyWeather ldw in lf.ForecastDict.Values)
+                LocationDaylyForecasts.Add(ldw);
+        }
     }
 }

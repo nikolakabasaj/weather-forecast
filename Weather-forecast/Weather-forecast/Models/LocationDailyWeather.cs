@@ -38,6 +38,8 @@ namespace Weather_forecast.Models
 
         [DisplayName("Wind degree")]
         public double Wind_degree { get; set; }
+
+        public string StringIcon { get; set; }
         public Image Icon { get; set; }
 
         public LocationDailyWeather() { }
@@ -55,8 +57,13 @@ namespace Weather_forecast.Models
             Cloud_all = cloud_all;
             Wind_speed = wind_speed;
             Wind_degree = wind_degree;
-            Icon = IconMaker.LoadImage(icon);
+            StringIcon = icon;
             Celsius =  Math.Round(Kelvin - 273.15, 1);
+        }
+
+        public void loadIcon()
+        {
+            Icon = IconHandler.LoadImage(StringIcon);
         }
         public string getOnlyTime()
         {
@@ -65,18 +72,7 @@ namespace Weather_forecast.Models
 
         public string getOnlyDayAndTime()
         {
-            return Time.ToString("ddd dd:MM tt");
-        }
-
-        public int getValueByAttributeName(string name)
-        {
-            foreach (var prop in this.GetType().GetProperties()) {
-                if (prop.Name == name) {
-                    return (int) prop.GetValue(prop);
-                }
-            }
-               
-            return 0;        
+            return Time.ToString("ddd hh:mm tt");
         }
     }
 }

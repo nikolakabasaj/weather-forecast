@@ -8,11 +8,11 @@
         Title="Current location weather" Height="450" Width="800" Background="#FF593535">
 
 
-    <Grid x:Name="MainGrid"  x:FieldModifier="public" Background="#FF1F202B" Margin="-4,1,0.6,0">
-        <!-- <Grid.Background>
+    <Grid x:Name="MainGrid"  x:FieldModifier="public" Margin="-4,1,0.6,0">
+        <Grid.Background>
             <ImageBrush ImageSource="/Images/sky.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
-        -->
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="auto"/>
@@ -36,19 +36,19 @@
         </Grid.RowDefinitions>
 
         <Canvas Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="6" Margin="0,0,0.4,0">
-            <TextBox x:Name="searchText" Grid.Column="5" Grid.Row="1" Width="120" Canvas.Left="605" Canvas.Top="14" Background="#FF826D6D" BorderThickness="1" RenderTransformOrigin="0.488,0.534"/>
+            <TextBox x:Name="searchText" Grid.Column="5" Grid.Row="1" Width="145" Canvas.Left="580" Canvas.Top="14" Background="#FF826D6D" BorderThickness="1" RenderTransformOrigin="0.488,0.534" Height="21"/>
             <Popup x:Name="searchPopup" Height="45" Width="45" Canvas.Left="-15">
                 <TextBlock x:Name="messagePopup" Margin="-15,-20,14.8,19.8" ></TextBlock>
             </Popup>
             <Button x:Name="searchButton" Click="searchButton_Click" 
-                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="725" Canvas.Top="14" Background="#FFDDDDDD" Foreground="White" Height="18" Width="22">
+                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="725" Canvas.Top="14" Background="#FFDDDDDD" Foreground="White" Height="21" Width="22">
             </Button>
         </Canvas>
 
-        <StackPanel Grid.Row="0" Grid.RowSpan="6" RenderTransformOrigin="0.977,0.505" Margin="6,4,46.8,-2" Grid.ColumnSpan="3" Grid.Column="5">
+        <StackPanel  Grid.Row="0" Grid.RowSpan="6" RenderTransformOrigin="0.977,0.505" Margin="6,4,46.8,-2" Grid.ColumnSpan="3" Grid.Column="5">
             <StackPanel.Resources>
                 <Style TargetType="StackPanel">
-                    <Setter Property="Opacity" Value="0.6"/>
+                    <Setter Property="Opacity" Value="0.4"/>
                     <Setter Property="Background" Value="#16191f"/>
                 </Style>
             </StackPanel.Resources>
@@ -67,22 +67,17 @@
             <Button x:Name="tableView" Content="Table" Margin="0,10,0.2,10" Click="tableView_Click"
                         Height="21" Foreground="White" Background="{x:Null}" RenderTransformOrigin="0.519,1.491">
             </Button>
-            <Button x:Name="graphView" Content="Graph" Margin="0,10,0.2,10" Click="graphView_Click" Foreground="White" RenderTransformOrigin="0.505,0.553" >
-                <Button.Background>
-                    <ImageBrush/>
-                </Button.Background>
-            </Button>
         </StackPanel>
 
-        <WrapPanel Grid.Column="8" HorizontalAlignment="Left" Height="140" Margin="132.4,50,0,0" Grid.Row="4" VerticalAlignment="Top" Width="125" RenderTransformOrigin="0.503,0.529">
+        <WrapPanel Grid.Column="8" HorizontalAlignment="Left" Height="140" Margin="132.4,70,0,0" Grid.Row="4" VerticalAlignment="Top" Width="125" RenderTransformOrigin="0.503,0.529">
             <TextBlock TextWrapping="Wrap" Text="C" FontSize="110" Foreground="White" FontFamily="Segoe UI Light"/>
         </WrapPanel>
-        <TextBlock TextWrapping="Wrap" Foreground="White" FontFamily="Segoe UI Historic" FontSize="40" Height="68" Width="34" Grid.Column="8" Margin="93.4,97,297.4,214.2" Grid.Row="4"><Run Text="O"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
-        <Label x:Name = "clockTime"  Grid.Column="8" HorizontalAlignment="Left" Margin="408.2,29,0,0" Grid.Row="4" VerticalAlignment="Top" Height="106" Width="239" FontSize="80" Grid.IsSharedSizeScope="True" Background="{x:Null}" Foreground="#FFDADA" RenderTransformOrigin="0.79,0.687" Grid.ColumnSpan="3"/>
-        <Label x:Name = "clockSeconds" Content="" Grid.Column="9" HorizontalAlignment="Left" Margin="172,29,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" FontSize="20"/>
-        <Label x:Name="currentCity" Grid.Column="7" HorizontalAlignment="Left" Margin="16,29,0,0" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.448,-1.969" Height="68" Width="243" Foreground="White" FontSize="35" Content="    Current city" Grid.ColumnSpan="2"/>
-        <Label Content="Current location" Grid.Column="7" HorizontalAlignment="Left" Margin="34,77,0,0" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.792,-2.328" Foreground="#FF9FA4BC" FontSize="14" Width="139" Grid.ColumnSpan="2"/>
-        <Label x:Name="temmCurrentLocation"  Grid.Column="8" HorizontalAlignment="Left" Margin="7.4,107,0,0" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.208,-2.359" Height="93" Width="130" Foreground="White" FontSize="65" FontFamily="Segoe UI Semilight" Content="Tmp"/>
+        <TextBlock TextWrapping="Wrap" Foreground="White" FontFamily="Segoe UI Historic" FontSize="20" Grid.Column="8" Margin="102.4,110,293.4,194.2" Grid.Row="4"><Run Text="O"/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
+        <Label x:Name = "clockTime"  Grid.Column="8" HorizontalAlignment="Left" Margin="372.4,55,0,0" Grid.Row="4" VerticalAlignment="Top" Height="106" Width="239" FontSize="80" Grid.IsSharedSizeScope="True" Background="{x:Null}" Foreground="#FFDADA" RenderTransformOrigin="0.79,0.687" Grid.ColumnSpan="2"/>
+        <Label x:Name = "clockSeconds" Content="" Grid.Column="9" HorizontalAlignment="Left" Margin="147.6,45,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="#FFFFDADA" FontSize="20"/>
+        <Label x:Name="currentCity" Grid.Column="7" HorizontalAlignment="Left" Margin="16,25,0,0" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.448,-1.969" Height="68" Width="260" Foreground="White" FontSize="35" Content="    Current city" Grid.ColumnSpan="2"/>
+        <Label Content="Current location" Grid.Column="8" HorizontalAlignment="Left" Margin="2.4,71,0,0" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.792,-2.328" Foreground="#FF9FA4BC" FontSize="14" Width="139"/>
+        <Label x:Name="temmCurrentLocation"  Grid.Column="7" HorizontalAlignment="Left" Margin="51,110,0,0" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.208,-2.359" Height="93" Width="130" Foreground="White" FontSize="65" FontFamily="Segoe UI Semilight" Content="Tmp" Grid.ColumnSpan="2"/>
         <Label x:Name="icon" Content="icon" Grid.Column="8" HorizontalAlignment="Left" Margin="215.2,102,0,0" Grid.Row="4" VerticalAlignment="Top" Height="69" Width="99" FontSize="50" Foreground="White"/>
 
         <Line X1="130" Y1="300" X2="700" Y2="300" Stroke="White" StrokeThickness="200" Fill="White" OpacityMask="White" />
@@ -99,27 +94,32 @@
             <Label x:Name="measuredTime" Foreground="#FFA1A2B7" FontFamily="Maiandra GD" Height="24" Content="time"/>
         </WrapPanel>
 
-        <Label x:Name="icon1" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="14.2,256,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="80" FontSize="110"/>
-        <TextBlock x:Name="time1" Grid.Column="7" HorizontalAlignment="Left" Margin="46,329,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2"/>
+        <Label x:Name="icon1" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="17.4,265,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="80" FontSize="110"/>
+        <TextBlock x:Name="time1" Grid.Column="8" HorizontalAlignment="Left" Margin="2.4,325,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White"/>
 
-        <Label x:Name="icon2" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="136.2,254,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="66" Width="81" FontSize="110"/>
+        <Label x:Name="icon2" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="142.4,259,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="66" Width="81" FontSize="110"/>
         <TextBlock x:Name="time2" Grid.Column="8" HorizontalAlignment="Left" Margin="124.2,324,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White"/>
 
-        <Label x:Name="icon3" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="270.2,257,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="72" FontSize="110"/>
-        <TextBlock x:Name="time3" Grid.Column="8" HorizontalAlignment="Left" Margin="248.2,327,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White"/>
+        <Label x:Name="icon3" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="267.4,260,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="72" FontSize="110"/>
+        <TextBlock x:Name="time3" Grid.Column="8" HorizontalAlignment="Left" Margin="247.4,324,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White"/>
 
-        <Label x:Name="icon4" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="405.2,255,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="70" FontSize="110" Grid.ColumnSpan="2"/>
+        <Label x:Name="icon4" Content="Label1" Grid.Column="8" HorizontalAlignment="Left" Margin="412.4,260,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="70" FontSize="110" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="time4" Grid.Column="8" HorizontalAlignment="Left" Margin="388.2,325,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2"/>
 
-        <Label x:Name="icon5" Content="Label1" Grid.Column="9" HorizontalAlignment="Left" Margin="103,255,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="69" FontSize="110"/>
+        <Label x:Name="icon5" Content="Label1" Grid.Column="9" HorizontalAlignment="Left" Margin="103.6,260,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Height="65" Width="69" FontSize="110"/>
         <TextBlock x:Name="time5" Grid.Column="9" HorizontalAlignment="Left" Margin="87,325,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Foreground="White"/>
 
-        <TextBlock x:Name="temp1" Grid.Column="7" HorizontalAlignment="Left" Margin="46,289,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="45" Foreground="White" Grid.ColumnSpan="2" Height="31"/>
-        <TextBlock x:Name="temp2" Grid.Column="8" HorizontalAlignment="Left" Margin="254.2,290,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="44" Foreground="White"/>
+        <Label Content="o" Grid.Column="8" HorizontalAlignment="Left" Margin="19.4,275,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="o" Grid.Column="8" HorizontalAlignment="Left" Margin="142.4,275,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="o" Grid.Column="8" HorizontalAlignment="Left" Margin="269.4,275,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="o" Grid.Column="8" HorizontalAlignment="Left" Margin="404.4,275,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White" Grid.ColumnSpan="2" Width="23"/>
+        <Label Content="o" Grid.Column="9" HorizontalAlignment="Left" Margin="102.6,275,0,0" Grid.Row="4" VerticalAlignment="Top" Foreground="White"/>
+        <TextBlock x:Name="temp1" Grid.Column="8" HorizontalAlignment="Left" Margin="2.4,289,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="45" Foreground="White" Height="31"/>
+        <TextBlock x:Name="temp2" Grid.Column="8" HorizontalAlignment="Left" Margin="248.4,288,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="44" Foreground="White"/>
         <TextBlock x:Name="temp3" Grid.Column="8" HorizontalAlignment="Left" Margin="124.2,288,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="44" Foreground="White"/>
         <TextBlock x:Name="temp4" Grid.Column="8" HorizontalAlignment="Left" Margin="388.2,288,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="44" Foreground="White" Grid.ColumnSpan="2"/>
-        <TextBlock x:Name="temp5" Grid.Column="9" HorizontalAlignment="Left" Margin="95,288,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="44" Foreground="White"/>
-        <Rectangle Grid.ColumnSpan="3" Grid.Column="7" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="1" Margin="36,244,0,0" Grid.Row="4" Stroke="#FF523636" VerticalAlignment="Top" Width="615" RenderTransformOrigin="0.5,0.5">
+        <TextBlock x:Name="temp5" Grid.Column="9" HorizontalAlignment="Left" Margin="82.6,288,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="49" Foreground="White"/>
+        <Rectangle Grid.ColumnSpan="3" Grid.Column="7" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="1" Margin="36,244,0,0" Grid.Row="4" Stroke="#FF4C2B2B" VerticalAlignment="Top" Width="615" RenderTransformOrigin="0.5,0.5">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -129,10 +129,12 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
+
         <Label x:Name="addCityTextBox" Grid.Column="9" HorizontalAlignment="Left"
                    Margin="77.6,10,0,0" Grid.Row="4"  Content="Add city to table"
                    VerticalAlignment="Top" Width="105" 
                    Foreground="#FFAE8A8A" FontWeight="Bold" FontFamily="Ebrima" FontSize="10" Height="25"/>
-        <Label x:Name="informationLabel" Grid.Column="8" HorizontalAlignment="Left" Margin="192.4,10,0,0" VerticalAlignment="Top" Width="170" Grid.RowSpan="5" Foreground="#FFB67F7F" FontSize="15" Height="30"/>
+        <Label x:Name="informationLabel" Grid.Column="8" HorizontalAlignment="Left" Margin="127.4,0,0,0" VerticalAlignment="Top" Width="335" Foreground="#FFC53636" FontSize="15" Height="30" FontWeight="Bold" Grid.Row="4" Grid.ColumnSpan="2"/>
+
     </Grid>
 </Window>

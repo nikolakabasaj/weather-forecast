@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Weather_forecast.Interfaces;
 using Weather_forecast.JSONMapper;
@@ -53,6 +54,7 @@ namespace Weather_forecast.Models
             foreach (LocationDailyWeather ldw in currentCityForecast.ForecastDict.Values)
             {
                 if (cnt == 5) break;
+                ldw.loadIcon();
                 firstFive.Add(ldw);
                 cnt++;
             }
@@ -65,7 +67,8 @@ namespace Weather_forecast.Models
         public LocationForecast getLocationForecast(string cityName)
         {
             storeLocationForecast(cityName);
-            return locationForecast[cityName.ToLower()];
+            LocationForecast lf = locationForecast[cityName.ToLower()];
+            return lf;
         }
         public void storeLocationForecast(string cityName)
         {

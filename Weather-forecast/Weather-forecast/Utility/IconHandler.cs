@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Weather_forecast.Utility
 {
-    class IconMaker
+    class IconHandler
     {
         private static byte[] getIcon(string iconString)
         {
@@ -38,7 +39,7 @@ namespace Weather_forecast.Utility
                 image.EndInit();
             }
             image.Freeze();
-
+            
             var controlsImage = new Image();
             controlsImage.Source = image;
 

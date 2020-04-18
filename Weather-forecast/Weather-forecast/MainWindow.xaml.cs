@@ -33,13 +33,11 @@ namespace Weather_forecast
         public static Forecast forecast = new Forecast();
         private Clock clock;
 
-        // ---------------------- 
-        private static CurrentCity currCity = new CurrentCity();                                        // Get city from API
+        private static CurrentCity currCity = new CurrentCity();                                       
         private static string currentCityName = currCity.CityName;   
         private static CurrentWeather currentCityWeather = forecast.getCurrentWeather(currentCityName);
 
-        // ----------------------
-        private DispatcherTimer messageTimer = new DispatcherTimer();
+        public static DispatcherTimer messageTimer = new DispatcherTimer();
         private bool _informationMessage;
         private bool InformationMessage
         {
@@ -55,8 +53,6 @@ namespace Weather_forecast
                
             }
         }
-        // ----------------------
-
 
         public MainWindow()
         {
@@ -73,7 +69,31 @@ namespace Weather_forecast
             clockTime.Content = hoursMinutes;
             clockSeconds.Content = values[2];
         }
+
+        private void dt_Tick(object sender, object e)
+        {
+            informationLabel.Opacity -= 0.11;
+            if (informationLabel.Opacity <= 0)
+            {
+                InformationMessage = false;
+                messageTimer.Stop();
+
+                informationLabel.Opacity = 1.0;
+                informationLabel.Content = "";
+            }
+        }
        
+        private void TimerStart()
+        {
+            if (InformationMessage)
+            {
+                Thread.Sleep(1000);
+                messageTimer.Interval = TimeSpan.FromMilliseconds(30);
+                messageTimer.Tick += dt_Tick;
+                messageTimer.Start();
+            }
+        }
+
         private void tableView_Click(object sender, RoutedEventArgs e)
         {
             if (forecast.locationForecast.Count != 0)
@@ -88,11 +108,6 @@ namespace Weather_forecast
             }  
         }
 
-        private void graphView_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string cityName = searchText.Text;
@@ -102,36 +117,21 @@ namespace Weather_forecast
                 LocationForecast lf = forecast.getLocationForecast(cityName);
                 
                 searchText.Clear();
-                informationLabel.Content = "City '" + textInfo.ToTitleCase(cityName) + "' added";
+                informationLabel.Content = $"The city '{textInfo.ToTitleCase(cityName)}' was added to the table!";
             }
             catch
             {
-                informationLabel.Content = "City '" + textInfo.ToTitleCase(cityName) + "'does not exist!";
+                if(cityName == "") {
+                    informationLabel.Content = "You did not enter a city name!";
+                }
+                else {
+                    informationLabel.Content = "City '" + textInfo.ToTitleCase(cityName) + "'does not exist!";
+                }
+                
             }
             InformationMessage = true;
         }
-        private void TimerStart()
-        {
-            if (InformationMessage)
-            {
-                Thread.Sleep(1000);
-                messageTimer.Interval = TimeSpan.FromMilliseconds(30);
-                messageTimer.Tick += dt_Tick;
-                messageTimer.Start();
-            }
-        }
-
-        private void dt_Tick(object sender, object e)
-        {
-            informationLabel.Opacity -= 0.11;
-            if (informationLabel.Opacity <= 0) {
-                InformationMessage = false;
-                messageTimer.Stop();
-
-                informationLabel.Opacity = 1.0;
-                informationLabel.Content = "";
-            }
-        }
+           
         private void setFirstFivePrognosis()
         {
             List<LocationDailyWeather> firstFive = forecast.getFirstFivePrognosis(currentCityName);
@@ -155,6 +155,7 @@ namespace Weather_forecast
             time5.Text = firstFive[4].getOnlyDayAndTime();
             temp5.Text = firstFive[4].Celsius.ToString();
         }
+        
         private void setCurrentCityInformation()
         {
             currentCity.Content = currentCityWeather.name;
@@ -162,10 +163,12 @@ namespace Weather_forecast
             icon.Content = currentCityWeather.weather[0].getIcon();
             measuredTime.Content = DateTime.Now.ToString("hh:mm tt");
         }
+        
         private void setClock()
         {
             clock = new Clock(clockTicker);
         }
+        
         private void setHomePage()
         {
             setFirstFivePrognosis();

@@ -9,6 +9,7 @@ using Weather_forecast.OriginalModels;
 using Weather_forecast.Web_mapping;
 using Weather_forecast.Utility;
 using Weather_forecast.JSONModels.Current_forecast;
+using System.Threading;
 
 namespace Weather_forecast.JSONMapper
 {
@@ -22,16 +23,16 @@ namespace Weather_forecast.JSONMapper
             return JsonConvert.DeserializeObject<JSONForecast>(json);
         }
 
+        [STAThread]
         public LocationForecast getLocationForecast(string cityName)
         {
             JSONForecast jsonObject = JSONtoJSONObject(cityName);
             LocationForecast lf = new LocationForecast();
 
             lf.Name = jsonObject.city.name;
-            foreach (HourlyWeather lo in jsonObject.list) 
-            {
+            foreach(var lo in jsonObject.list)
                 lf.ForecastDict.Add(UnixToDatetime.UnixTimeStampToDateTime(lo.dt), getSingle(lf.Name, lo));
-            }
+            
             return lf;
         }
         
