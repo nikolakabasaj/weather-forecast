@@ -40,10 +40,10 @@
             <Popup x:Name="searchPopup" Height="45" Width="45" Canvas.Left="-15">
                 <TextBlock x:Name="messagePopup" Margin="-15,-20,14.8,19.8" ></TextBlock>
             </Popup>
-            <Button x:Name="searchButton" Click="searchButton_Click" 
-                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="725" Canvas.Top="14" Background="{x:Null}" Foreground="White" Height="21" Width="22">
+            <Button x:Name="searchButton" Click="searchButton_Click" Opacity="0.3"
+                    Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="725" Canvas.Top="14" Background="#FF6A70DC" Foreground="White" Height="21" Width="22">
                 <StackPanel Height="26">
-                    <Image Source="/Images/add.png" Height="14" Width="19" RenderTransformOrigin="0.544,0.451" OpacityMask="Black" >
+                    <Image Source="/Images/search.png" Height="19" Width="19" RenderTransformOrigin="0.544,0.451" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -73,7 +73,9 @@
                 </TransformGroup>
             </StackPanel.RenderTransform>
 
-            <Button  Height="45" Background="{x:Null}"/>
+            <Button Height="45" Background="#FF48516E" Opacity="0.45">
+                <Image Source="/Images/app.png" Height="36" Width="60" RenderTransformOrigin="0.544,0.451" OpacityMask="Black" />
+            </Button>
             <Separator Height="55" Margin="0" Background="{x:Null}"/>
 
             <Button x:Name="tableView" Content="Table" Margin="0,10,0.2,10" Click="tableView_Click"

@@ -84,29 +84,29 @@ namespace Weather_forecast.Components.Table
             fromDate.SelectedItem = MainWindow.forecast.getAllDates().First();
             toDate.SelectedItem = MainWindow.forecast.getAllDates().Last();
             graphType.ItemsSource = graphParameters;
-
-            cityToDelete.ItemsSource = MainWindow.forecast.getAllCities();
         }
 
         private void Filter_Click(object sender, RoutedEventArgs e)
         {
             Nullable<DateTime> from = fromDate.SelectedItem as Nullable<DateTime>;
             Nullable<DateTime> to = toDate.SelectedItem as Nullable<DateTime>;
-            string cityName = filterCity.Text.ToLower();
 
             tableView.ItemsSource = null;
-            tableView.ItemsSource = applyFilter(from, to, cityName);
+            tableView.ItemsSource = applyFilter(from, to);
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             LocationDaylyForecasts.Clear();
+            graphType.ItemsSource = null;
+            graphType.ItemsSource = graphParameters;
+
             initializeTableRows();
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            string cityName = cityToDelete.SelectedItem as string;
+            string cityName = listBox.SelectedItem as string;
 
             if(cityName != null) {
                 cityName = cityName.ToLower();
@@ -115,7 +115,6 @@ namespace Weather_forecast.Components.Table
                 tableView.ItemsSource = delete(cityName);
               
                 MainWindow.forecast.locationForecast.Remove(cityName);
-                cityToDelete.ItemsSource = MainWindow.forecast.getAllCities();
                 listBox.ItemsSource = MainWindow.forecast.getAllCities();
 
                 messageInformation.Content = $"{ StringHandler.capitalize(cityName) } is successfully removed from table!";
@@ -135,8 +134,7 @@ namespace Weather_forecast.Components.Table
             foreach (string s in listBox.SelectedItems)
                 listBoxItems.Add(s.ToLower());
 
-
-            if (graphDataType == "" || listBoxItems.Count == 0)
+            if (graphDataType == "" || graphDataType == null || listBoxItems.Count == 0)
             {
                 messageInformation.Content = "You did not choose values for graph!";
                 IsMessageVisible = true;
@@ -154,14 +152,12 @@ namespace Weather_forecast.Components.Table
             return LocationDaylyForecasts;
         }
 
-        private ObservableCollection<LocationDailyWeather> applyFilter(Nullable<DateTime> from, Nullable<DateTime> to, string cityName)
+        private ObservableCollection<LocationDailyWeather> applyFilter(Nullable<DateTime> from, Nullable<DateTime> to)
         {
             if (from != null)
                 LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => from <= i.Time));
             if(to != null)
                 LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Time <= to)); 
-            if (cityName != null && !cityName.Equals(""))
-                LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Name.ToLower().Contains(cityName.ToLower())));
             return LocationDaylyForecasts;
         }
 

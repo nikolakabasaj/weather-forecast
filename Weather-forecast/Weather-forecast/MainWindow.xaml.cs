@@ -49,8 +49,7 @@ namespace Weather_forecast
                     _informationMessage = value;
                     Thread startTick = new Thread(TimerStart);
                     startTick.Start();
-                }
-               
+                }  
             }
         }
 
