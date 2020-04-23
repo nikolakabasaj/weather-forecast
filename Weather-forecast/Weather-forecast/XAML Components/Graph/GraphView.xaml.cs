@@ -29,6 +29,7 @@ namespace Weather_forecast.XAML_Components.Graph
 
         public void setComponents(string graphData, string[] cities)
         {
+            chartView.Series.Clear();
             setAxesLabels("Forecast during days", $"City {adjustAttributeName(graphData).ToLower()} during days");
             foreach (string city in cities)
             {

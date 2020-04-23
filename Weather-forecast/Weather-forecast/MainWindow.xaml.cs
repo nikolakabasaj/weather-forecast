@@ -30,6 +30,8 @@ namespace Weather_forecast
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static TableView table;
+
         public static Forecast forecast = new Forecast();
         private Clock clock;
 
@@ -96,9 +98,10 @@ namespace Weather_forecast
         private void tableView_Click(object sender, RoutedEventArgs e)
         {
             if (forecast.locationForecast.Count != 0)
-            {
-                var table = new TableView();
-                table.Show();
+            {   
+                if(table == null)
+                    table = new TableView();
+                    table.Show();
             }
             else
             {
@@ -110,12 +113,14 @@ namespace Weather_forecast
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string cityName = searchText.Text;
-           
             try
             {
                 LocationForecast lf = forecast.getLocationForecast(cityName);
-                
-                searchText.Clear();
+                if (table != null) {
+                    table.initializeTableRows();
+                    table.fillListBox();
+                }
+
                 informationLabel.Content = $"The city '{StringHandler.capitalize(lf.Name)}' was added to the table!";
             }
             catch
@@ -124,11 +129,13 @@ namespace Weather_forecast
                     informationLabel.Content = "You did not enter a city name!";
                 }
                 else {
-                    informationLabel.Content = $"City '{StringHandler.capitalize(cityName)}'does not exist!";
+                    informationLabel.Content = $"City '{StringHandler.capitalize(cityName)}' does not exist!";
                 }
                 
             }
+            searchText.Clear();
             InformationMessage = true;
+
         }
 
         private void setFirstFivePrognosis()
