@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Weather_forecast.XAML_Components.Graph"
-        xmlns:DV="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"  
-        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" xmlns:primitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        
         mc:Ignorable="d"
         Title="Graph" Height="600" Width="1400">
 
@@ -13,62 +12,6 @@
         <Grid.Background>
             <ImageBrush ImageSource="/Images/sky.jpg" Stretch="None" TileMode="Tile"/>
         </Grid.Background>
-        <DVC:Chart x:Name="chartView" Margin="60,65,33.6,75.4" Foreground="#FFB13028" BorderBrush="#FF52586C" FontSize="10" >
-            <DVC:Chart.PlotAreaStyle>
-                <Style TargetType="Grid">
-                    <Setter Property="Background" Value="Transparent"/>
-                </Style>
-            </DVC:Chart.PlotAreaStyle>
-
-            <DVC:Chart.LegendStyle>
-                <Style TargetType="DV:Legend">
-                    <Setter Property="Margin" Value="15,0"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                </Style>
-            </DVC:Chart.LegendStyle>
-
-            <DVC:Chart.Style>
-                <Style TargetType="DVC:Chart">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="DVC:Chart">
-                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <Grid Grid.Row="1" Margin="0,15,0,15">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <DV:Legend x:Name="Legend"  Style="{TemplateBinding LegendStyle}" Grid.Column="1" />
-                                            <primitives:EdgePanel x:Name="ChartArea" Style="{TemplateBinding ChartAreaStyle}">
-                                                <Grid Canvas.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}" />
-                                            </primitives:EdgePanel>
-                                        </Grid>
-                                    </Grid>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DVC:Chart.Style>
-        </DVC:Chart>
         
-        <Label x:Name="yAxesLabel" HorizontalAlignment="Left" Margin="-125,255,0,0" VerticalAlignment="Top" Width="323" Foreground="#FFB13028" FontSize="15" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center">
-            <Label.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-89.753"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Label.RenderTransform>
-        </Label>
-        <Label x:Name="xAxesLabel"  HorizontalAlignment="Left" Margin="305,505,0,0" VerticalAlignment="Top" Width="625" FontSize="15" Foreground="#FFB13028" Height="35" HorizontalContentAlignment="Center"/>
     </Grid>
 </Window>

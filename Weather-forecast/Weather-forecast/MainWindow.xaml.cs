@@ -55,46 +55,16 @@ namespace Weather_forecast
             }
         }
 
+
         public MainWindow()
         {
             InitializeComponent();
-            setHomePage();
+            setInitialHomePage();
         }
 
-        public void clockTicker(object sender, EventArgs e)
-        {   
-            clock.tickIncrement++;
-            string[] values = clock.getCurrentTime();
-            string hoursMinutes = values[0] + ":" + values[1];
-
-            clockTime.Content = hoursMinutes;
-            clockSeconds.Content = values[2];
-        }
-
-        private void dt_Tick(object sender, object e)
-        {
-            informationLabel.Opacity -= 0.11;
-            if (informationLabel.Opacity <= 0)
-            {
-                InformationMessage = false;
-                messageTimer.Stop();
-
-                informationLabel.Opacity = 1.0;
-                informationLabel.Content = "";
-            }
-        }
-       
-        private void TimerStart()
-        {
-            if (InformationMessage)
-            {
-                Thread.Sleep(2000);
-                messageTimer.Interval = TimeSpan.FromMilliseconds(30);
-                messageTimer.Tick += dt_Tick;
-                messageTimer.Start();
-            }
-        }
-
+        /*
+            Event handlers 
+        */
         private void tableView_Click(object sender, RoutedEventArgs e)
         {
             if (forecast.locationForecast.Count != 0)
@@ -113,31 +83,14 @@ namespace Weather_forecast
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string cityName = searchText.Text;
-            try
-            {
-                LocationForecast lf = forecast.getLocationForecast(cityName);
-                if (table != null) {
-                    table.initializeTableRows();
-                    table.fillListBox();
-                }
 
-                informationLabel.Content = $"The city '{StringHandler.capitalize(lf.Name)}' was added to the table!";
-            }
-            catch
-            {
-                if(cityName == "") {
-                    informationLabel.Content = "You did not enter a city name!";
-                }
-                else {
-                    informationLabel.Content = $"City '{StringHandler.capitalize(cityName)}' does not exist!";
-                }
-                
-            }
-            searchText.Clear();
-            InformationMessage = true;
-
+            addToTable(cityName);
+            setHomePage(cityName);
         }
 
+        /*
+            Home page setting components
+        */
         private void setFirstFivePrognosis()
         {
             List<LocationDailyWeather> firstFive = forecast.getFirstFivePrognosis(currentCityName);
@@ -164,22 +117,104 @@ namespace Weather_forecast
         
         private void setCurrentCityInformation()
         {
-            currentCity.Content = currentCityWeather.name;
+            currentCity.Content = StringHandler.toUTFString(currentCityWeather.name);
             temmCurrentLocation.Content = currentCityWeather.main.getCelsius();
             icon.Content = currentCityWeather.weather[0].getIcon();
             measuredTime.Content = DateTime.Now.ToString("hh:mm tt");
         }
         
-        private void setClock()
-        {
-            clock = new Clock(clockTicker);
-        }
-        
-        private void setHomePage()
+        private void setInitialHomePage()
         {
             setFirstFivePrognosis();
             setCurrentCityInformation();
             setClock();
         }
+    
+        private void setHomePage(string cityName)
+        {
+            currentCityName = cityName;
+            currentLocationLabel.Content = "Last added city";
+            try
+            {
+                currentCityWeather = forecast.getCurrentWeather(currentCityName);
+                setInitialHomePage();
+            }
+            catch
+            {
+
+            }
+        }
+    
+        private void addToTable(string cityName)
+        {
+            try
+            {
+                LocationForecast lf = forecast.getLocationForecast(cityName);
+                if (table != null)
+                {
+                    table.initializeTableRows();
+                    table.fillListBox();
+                }
+
+                informationLabel.Content = $"The city {StringHandler.capitalize(lf.Name )} was added to the table!";
+            }
+            catch
+            {
+                if (cityName == "")
+                {
+                    informationLabel.Content = "You did not enter a city name!";
+                }
+                else
+                {
+                    informationLabel.Content = $"City '{StringHandler.capitalize(cityName)}' does not exist!";
+                }
+
+            }
+            searchText.Clear();
+            InformationMessage = true;
+        }
+
+        /*
+            Clock and timer setters 
+        */
+        public void clockTicker(object sender, EventArgs e)
+        {
+            clock.tickIncrement++;
+            string[] values = clock.getCurrentTime();
+            string hoursMinutes = values[0] + ":" + values[1];
+
+            clockTime.Content = hoursMinutes;
+            clockSeconds.Content = values[2];
+        }
+
+        private void dt_Tick(object sender, object e)
+        {
+            informationLabel.Opacity -= 0.11;
+            if (informationLabel.Opacity <= 0)
+            {
+                InformationMessage = false;
+                messageTimer.Stop();
+
+                informationLabel.Opacity = 1.0;
+                informationLabel.Content = "";
+            }
+        }
+
+        private void TimerStart()
+        {
+            if (InformationMessage)
+            {
+                Thread.Sleep(2000);
+                messageTimer.Interval = TimeSpan.FromMilliseconds(30);
+                messageTimer.Tick += dt_Tick;
+                messageTimer.Start();
+            }
+        }
+
+        private void setClock()
+        {
+            clock = new Clock(clockTicker);
+        }
+
     }
 }
