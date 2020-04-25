@@ -86,6 +86,14 @@ namespace Weather_forecast
 
             addToTable(cityName);
             setHomePage(cityName);
+
+            if (table != null)
+            {
+                table.setComponentsValues();
+                table.setLastAddedCityAsSelected();
+                table.setDefaultGraphParameter();
+                table.setChartComponents();
+            }      
         }
 
         /*
@@ -172,6 +180,12 @@ namespace Weather_forecast
             }
             searchText.Clear();
             InformationMessage = true;
+        }
+
+        private int daysNum()
+        {
+            int index = table.daysNumber.SelectedIndex;
+            return index + 1;
         }
 
         /*
