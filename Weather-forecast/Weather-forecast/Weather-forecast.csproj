@@ -46,6 +46,7 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Device" />
@@ -71,9 +72,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utility\StringHandler.cs" />
-    <Compile Include="XAML Components\Graph\GraphView.xaml.cs">
-      <DependentUpon>GraphView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="XAML Components\Table\TableView.xaml.cs">
       <DependentUpon>TableView.xaml</DependentUpon>
     </Compile>
@@ -95,10 +93,6 @@
     <Compile Include="Utility\Clock.cs" />
     <Compile Include="Utility\CurrentCity.cs" />
     <Compile Include="Weather WEB collector\FetchWeather.cs" />
-    <Page Include="XAML Components\Graph\GraphView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="XAML Components\Table\TableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

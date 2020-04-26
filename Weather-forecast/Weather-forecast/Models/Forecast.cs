@@ -27,10 +27,12 @@ namespace Weather_forecast.Models
             mapper = new Mapper();
             allDates = new HashSet<DateTime>();
         }
+       
         public HashSet<string> getAllCities()
         {
             return locationForecast.Keys.Select(k => StringHandler.capitalize(k)).ToHashSet<string>();
         }
+       
         public HashSet<DateTime> getAllDates()
         {
             if(locationForecast.Count != 0)
@@ -43,10 +45,12 @@ namespace Weather_forecast.Models
             }
             return allDates;
         }
+      
         public LocationDailyWeather getFirstLocationDailyForecast()
         {
             return locationForecast.Values.First().getFirstValue();
         }
+      
         public List<LocationDailyWeather> getFirstFivePrognosis(string cityName)
         {
             int cnt = 0;
@@ -61,15 +65,18 @@ namespace Weather_forecast.Models
             }
             return firstFive;
         }
+       
         public CurrentWeather getCurrentWeather(string cityName)
         {
             return mapper.JSONtoCurrentCity(cityName);
         }
+       
         public LocationForecast getLocationForecast(string cityName)
         {
             string UTFname = storeLocationForecast(cityName);
             return locationForecast[UTFname];
         }
+        
         public string storeLocationForecast(string cityName)
         {
             if (!isCityStored(cityName))
@@ -80,6 +87,7 @@ namespace Weather_forecast.Models
             }
             return cityName;
         }
+        
         private bool isCityStored(string cityName)
         {
             if (!locationForecast.ContainsKey(cityName))
@@ -87,6 +95,7 @@ namespace Weather_forecast.Models
 
             return true;
         }
+        
         private bool isDateRangeValid(DateTime from, DateTime to)
         {
             if (from > to)

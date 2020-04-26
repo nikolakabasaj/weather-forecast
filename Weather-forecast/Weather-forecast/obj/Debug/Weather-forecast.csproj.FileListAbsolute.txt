@@ -56,3 +56,30 @@ C:\Users\nikol\Desktop\HCI gitlab\weather-forecast\Weather-forecast\Weather-fore
 C:\Users\nikol\Desktop\HCI gitlab\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csproj.CopyComplete
 C:\Users\nikol\Desktop\HCI gitlab\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.exe
 C:\Users\nikol\Desktop\HCI gitlab\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.pdb
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\Weather-forecast.exe.config
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\Weather-forecast.exe
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\Weather-forecast.pdb
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\MaterialDesignColors.dll
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\MaterialDesignThemes.Wpf.dll
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\Newtonsoft.Json.dll
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\System.Windows.Controls.DataVisualization.Toolkit.dll
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\MaterialDesignColors.pdb
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\MaterialDesignThemes.Wpf.pdb
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\MaterialDesignThemes.Wpf.xml
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\Newtonsoft.Json.xml
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\System.Windows.Controls.DataVisualization.Toolkit.xml
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csprojAssemblyReference.cache
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\XAML Components\Table\TableView.g.cs
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\MainWindow.g.cs
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\App.g.cs
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast_MarkupCompile.cache
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast_MarkupCompile.lref
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\XAML Components\Table\TableView.baml
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\MainWindow.baml
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.g.resources
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather_forecast.Properties.Resources.resources
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csproj.GenerateResource.cache
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csproj.CoreCompileInputs.cache
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csproj.CopyComplete
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.exe
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.pdb

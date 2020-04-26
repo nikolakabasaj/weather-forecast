@@ -14,10 +14,11 @@ using System.Windows.Shapes;
 using Weather_forecast.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Weather_forecast.XAML_Components.Graph;
 using System.Threading;
 using System.Windows.Threading;
 using Weather_forecast.Utility;
+using System.Windows.Controls.DataVisualization.Charting;
+using System.Runtime.InteropServices;
 
 namespace Weather_forecast.Components.Table
 {
@@ -26,13 +27,12 @@ namespace Weather_forecast.Components.Table
     /// </summary>
     public partial class TableView : Window
     {
-        private static GraphView graph;
         public ObservableCollection<LocationDailyWeather> LocationDaylyForecasts { get; set; }
         private static string[] graphParameters = { "Temperature", "Pressure", "Visibility", "Humidity" };
+        private static string[] forecastRange = { "One day", "Three days", "Five days" };
        
         private bool _isMessageVisible;
         private DispatcherTimer messageTimer = MainWindow.messageTimer;
-       
         private bool IsMessageVisible
         {
             get { 
@@ -42,7 +42,7 @@ namespace Weather_forecast.Components.Table
                 if (_isMessageVisible != value)
                 {
                     _isMessageVisible = value;
-                    Thread startTick = new Thread(TimerStart);
+                    Thread startTick = new Thread(timerStart);
                     startTick.Start();
                 }
             }
@@ -54,7 +54,9 @@ namespace Weather_forecast.Components.Table
             initializeTableRows();
             initializeAllComponents();
             InitializeComponent();
+            
             setComponentsValues();
+            drawChart();
         }
 
         private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -72,10 +74,12 @@ namespace Weather_forecast.Components.Table
             fromDate = new ComboBox();
             toDate = new ComboBox();
             
-            graphType = new ComboBox(); 
+            graphType = new ComboBox();
+
+            daysNumber = new ComboBox();
         }
         
-        private void setComponentsValues()
+        public void setComponentsValues()
         {
             fromDate.ItemsSource = MainWindow.forecast.getAllDates();
             toDate.ItemsSource = MainWindow.forecast.getAllDates();
@@ -86,13 +90,15 @@ namespace Weather_forecast.Components.Table
             fromDate.SelectedItem = MainWindow.forecast.getAllDates().First();
             toDate.SelectedItem = MainWindow.forecast.getAllDates().Last();
             graphType.ItemsSource = graphParameters;
+
+            daysNumber.ItemsSource = forecastRange;
         }
 
         private void Filter_Click(object sender, RoutedEventArgs e)
         {
             Nullable<DateTime> from = fromDate.SelectedItem as Nullable<DateTime>;
             Nullable<DateTime> to = toDate.SelectedItem as Nullable<DateTime>;
-            List<string> citiesList = getCities();
+            List<string> citiesList = getCitiesFromListBox();
 
             tableView.ItemsSource = null;
             tableView.ItemsSource = applyFilter(from, to, citiesList);
@@ -100,7 +106,7 @@ namespace Weather_forecast.Components.Table
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            LocationDaylyForecasts.Clear();
+            
             graphType.ItemsSource = null;
             graphType.ItemsSource = graphParameters;
 
@@ -109,7 +115,7 @@ namespace Weather_forecast.Components.Table
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            List<string> citiesList = getCities();
+            List<string> citiesList = getCitiesFromListBox();
 
             if (citiesList.Count != 0)
             {
@@ -135,7 +141,9 @@ namespace Weather_forecast.Components.Table
                 {
                     message = "Cities are";
                 }
-                messageInformation.Content = $"{message} successfully removed from table!";
+
+                drawChart();
+                messageInformation.Content = $"{message} successfully removed!";
                 IsMessageVisible = true;
             }
             else
@@ -143,37 +151,56 @@ namespace Weather_forecast.Components.Table
                 messageInformation.Content = "You did not choose city to delete!";
                 IsMessageVisible = true;
             }
-           
-
         }
 
         private void Graph_View_Click(object sender, RoutedEventArgs e)
         {
-            string graphDataType = adjustGraphTypeNames(graphType.SelectedItem as string);
-            List<string> listBoxItems = new List<string>();
-            foreach (string s in listBox.SelectedItems)
-                if(!listBoxItems.Contains(s))
-                    listBoxItems.Add(s.ToLower());
+            setChartComponents();
+        }
 
-            if (graphDataType == "" || graphDataType == null )
+        private void Expander_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (!expanderFilter.IsExpanded)
             {
-                messageInformation.Content = "You did not choose parameters for graph view!";
-                IsMessageVisible = true;
-            }
-            else if (listBoxItems.Count == 0)
-            {
-                messageInformation.Content = "You did not choose city for graph view!";
-                IsMessageVisible = true;
+                var brushConverter = new BrushConverter();
+                var tableBorderBrush = (Brush)brushConverter.ConvertFrom("#FF486473"); ;
+                expanderFilter.BorderBrush = tableBorderBrush;
             }
             else
             {
-                if(graph == null)
-                    graph = new GraphView();
-                graph.setComponents(graphDataType, listBoxItems.ToArray());
-                graph.Show();
+                expanderFilter.BorderBrush = null;
             }
         }
-        
+
+        private void Expander_PreviewMouseParameter(object sender, MouseButtonEventArgs e)
+        {
+            if (!expanderParameters.IsExpanded)
+            {
+                var brushConverter = new BrushConverter();
+                var tableBorderBrush = (Brush)brushConverter.ConvertFrom("#FF677A8C");
+                expanderParameters.BorderBrush = tableBorderBrush;
+            }
+            else
+            {
+                expanderParameters.BorderBrush = null;
+            }
+        }
+
+        private void daysNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LocationDaylyForecasts.Clear();
+            applyNumOfDaysFilter();
+
+            HashSet<DateTime> filteredDates = filterDates(numberOfDays());
+            fromDate.ItemsSource = filteredDates;
+            toDate.ItemsSource = filteredDates;
+
+            fromDate.SelectedItem = filteredDates.First();
+            toDate.SelectedItem = filteredDates.Last();
+
+            drawChart();
+        }
+
         private ObservableCollection<LocationDailyWeather> delete(string cityName) {
             LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Name != StringHandler.capitalize(cityName)));
             return LocationDaylyForecasts;
@@ -197,7 +224,12 @@ namespace Weather_forecast.Components.Table
             return LocationDaylyForecasts;
         }
 
-        private void TimerStart()
+        private void applyNumOfDaysFilter()
+        { 
+            setTableRows(numberOfDays());
+        }
+      
+        private void timerStart()
         {
             if (IsMessageVisible)
             {
@@ -221,6 +253,97 @@ namespace Weather_forecast.Components.Table
             }
         }
 
+        public void initializeTableRows()
+        {
+            foreach (string key in MainWindow.forecast.locationForecast.Keys)
+                addLocationDailyWeatherToForecast(MainWindow.forecast.locationForecast[key], forecastNum: 40);
+        }
+
+        private void setTableRows(int forecastNum)
+        {
+            foreach (string key in MainWindow.forecast.locationForecast.Keys)
+                addLocationDailyWeatherToForecast(MainWindow.forecast.locationForecast[key], forecastNum);
+        }
+
+        private void addLocationDailyWeatherToForecast(LocationForecast lf, int forecastNum)
+        {
+            int cnt = 0;
+            foreach (LocationDailyWeather ldw in lf.ForecastDict.Values)
+            {
+                LocationDaylyForecasts.Add(ldw);
+                if (++cnt == forecastNum) break;
+            } 
+        }
+
+        private List<string> getCitiesFromListBox()
+        {
+            List<string> citiesList = new List<string>();
+            foreach (string s in listBox.SelectedItems)
+                citiesList.Add(s);
+
+            return citiesList;
+        }
+        
+        /*
+         * Help methods
+        */
+        private HashSet<DateTime> filterDates(int numDays){
+            HashSet<DateTime> allDates = MainWindow.forecast.getAllDates() as HashSet<DateTime>;
+            HashSet<DateTime> retDates = new HashSet<DateTime>();
+            for(int i=0; i < allDates.Count; i++)
+            {
+                if (i == numDays) break;
+                retDates.Add(allDates.ElementAt(i));
+            }
+
+            return retDates;
+        }
+
+        public void fillListBox()
+        {
+            listBox.ItemsSource = MainWindow.forecast.getAllCities();
+        }
+
+        public void setLastAddedCityAsSelected()
+        {
+            try
+            {
+                listBox.SelectedItem = MainWindow.forecast.getAllCities().Last();
+            }
+            catch
+            { }
+           
+        }
+        
+        public void setDefaultGraphParameter()
+        {
+            graphType.SelectedItem = graphParameters[0];
+        }
+
+        public void setChartComponents()
+        {
+            string graphDataType = adjustGraphTypeNames(graphType.SelectedItem as string);
+            List<string> listBoxItems = new List<string>();
+            foreach (string s in listBox.SelectedItems)
+                if (!listBoxItems.Contains(s))
+                    listBoxItems.Add(s.ToLower());
+
+            if (graphDataType == "" || graphDataType == null)
+            {
+                messageInformation.Content = "You did not choose parameters for graph view!";
+                IsMessageVisible = true;
+            }
+            else if (listBoxItems.Count == 0)
+            {
+                messageInformation.Content = "You did not choose city for graph view!";
+                IsMessageVisible = true;
+            }
+            else
+            {
+                setComponents(graphDataType, listBoxItems.ToArray());
+            }
+        }
+
         private string adjustGraphTypeNames(string typeName)
         {
             string retString = "";
@@ -228,7 +351,7 @@ namespace Weather_forecast.Components.Table
             {
                 retString = "Celsius";
             }
-            else if(typeName == "Visibility")
+            else if (typeName == "Visibility")
             {
                 retString = "Cloud_all";
             }
@@ -240,31 +363,209 @@ namespace Weather_forecast.Components.Table
             return retString;
         }
 
-        public void initializeTableRows()
+        private int getDaysNum()
         {
+            int retNum = 0;
+            string selected = daysNumber.SelectedItem as string;
+            if(selected == "One day")
+            {
+                retNum = 1;
+            }
+            else if (selected == "Three days")
+            {
+                retNum = 3;
+            }
+            else if (selected == "Five days")
+            {
+                retNum = 5;
+            }
 
-            foreach (string key in MainWindow.forecast.locationForecast.Keys)
-                addLocationDailyWeatherToForecast(MainWindow.forecast.locationForecast[key]);
+            return retNum;
         }
 
-        private void addLocationDailyWeatherToForecast(LocationForecast lf)
+        private int numberOfDays()
         {
-            foreach (LocationDailyWeather ldw in lf.ForecastDict.Values)
-                LocationDaylyForecasts.Add(ldw);
+            int num = getDaysNum();
+            if(num != 5)
+            {
+                return num * 9;
+            }
+
+            return 40;
         }
 
-        private List<string> getCities()
+        /*
+            Chart view
+         */
+        public void setComponents(string chartData, string[] cities)
         {
-            List<string> citiesList = new List<string>();
-            foreach (string s in listBox.SelectedItems)
-                citiesList.Add(s);
+            chartView.Series.Clear();
+            setAxesLabels("Forecast during days", $"City {adjustAttributeName(chartData).ToLower()}");
 
-            return citiesList;
+            foreach (string city in cities)
+            {
+                var locationForecast = MainWindow.forecast.locationForecast[city];
+                KeyValuePair<string, double>[] valueList = getReducedKeyValuePairs(locationForecast, chartData);
+
+                LineSeries lineSeries = new LineSeries();
+                lineSeries.Title = city.ToUpper();
+                lineSeries.DependentValuePath = "Value";
+                lineSeries.IndependentValuePath = "Key";
+                lineSeries.ItemsSource = valueList;
+                chartView.Series.Add(lineSeries);
+            }
+        }
+
+        private KeyValuePair<string, double>[] getAllKeyValuePairs(LocationForecast locationForecast, string graphData)
+        {
+           return locationForecast.ForecastDict
+                                        .Select(pair => new KeyValuePair<string, double>(pair.Key.ToString("ddd h tt"), getAttributeValueByName(graphData, pair.Value)))
+                                        .ToArray();
+        }
+
+        private KeyValuePair<string, double>[] getReducedKeyValuePairs(LocationForecast locationForecast, string graphData)
+        {
+            int maxNum = geMaxNum();
+            int interval = getInterval();
+            KeyValuePair<string, double>[] retVal = new KeyValuePair<string, double>[maxNum];
+
+            int cnt = 0;
+            int addedNumber = 0;
+            foreach (var pair in locationForecast.ForecastDict)
+            {
+               if (cnt++ % interval == 0)
+                {
+                    retVal[addedNumber++] = new KeyValuePair<string, double>(pair.Key.ToString("ddd h tt"), getAttributeValueByName(graphData, pair.Value));
+                }
+                if (addedNumber == maxNum - 1) break;
+
+            }
+            return retVal;
+        }
+
+        private int geMaxNum()
+        {
+            int daysNum = getDaysNum();
+            int retVal = 0;
+            if(daysNum == 1 || daysNum == 3)
+            {
+                retVal = 10;
+            }
+            else
+            {
+                retVal = 9;
+            }
+            return retVal;
+        }
+
+        private int getInterval()
+        {
+            int daysNum = getDaysNum();
+            int retVal = 0;
+            if (daysNum == 1)
+            {
+                retVal = 1;
+            }
+            else if (daysNum == 1)
+            {
+                retVal = 3;
+            }
+            else
+            {
+                retVal = 5;
+            }
+            return retVal;
+        }
+
+        private double getAttributeValueByName(string attributeName, LocationDailyWeather ldw)
+        {
+            double retVal = 0;
+            if (attributeName == "Celsius")
+            {
+                retVal = ldw.Celsius;
+
+            }
+            else if (attributeName == "Pressure")
+            {
+                retVal = ldw.Pressure;
+            }
+            else if (attributeName == "Cloud_all")
+            {
+                retVal = ldw.Cloud_all;
+            }
+            else if (attributeName == "Humidity")
+            {
+                retVal = ldw.Humidity;
+            }
+
+            return retVal;
+        }
+
+        private string adjustAttributeName(string attributeName)
+        {
+            string retVal = "";
+            if (attributeName == "Celsius")
+            {
+                retVal = "Temperature";
+
+            }
+            else if (attributeName == "Cloud_all")
+            {
+                retVal = "Visibility";
+            }
+            else
+            {
+                retVal = attributeName;
+            }
+
+            return retVal;
+        }
+
+        private void setAxesLabels(string xAxesName, string yAxesName)
+        {
+            xAxesLabel.Content = xAxesName;
+            yAxesLabel.Content = yAxesName;
         }
         
-        public void fillListBox()
+        private int setChartInterval(int daysNum)
         {
-            listBox.ItemsSource = MainWindow.forecast.getAllCities();
+
+            int retVal = 0;
+            if (daysNum == 1)
+            {
+                retVal = daysNum;
+            }
+            else 
+            {
+                retVal = 3;
+            }
+
+            return retVal;
+        }
+    
+        private int xAxesSize()
+        {
+            int daysNum = getDaysNum();
+            int retVal = 0;
+            if(daysNum == 1 || daysNum == 3)
+            {
+                retVal = daysNum * 9;
+            }
+            else
+            {
+                retVal = 40;
+            }
+
+            return retVal;
+        }
+
+        private void drawChart()
+        {
+            if (chartView.Series != null)
+                chartView.Series.Clear();
+            setLastAddedCityAsSelected();
+            setDefaultGraphParameter();
+            setChartComponents();
         }
     }
 }
