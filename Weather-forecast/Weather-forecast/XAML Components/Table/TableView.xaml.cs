@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using Weather_forecast.Utility;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Runtime.InteropServices;
+using ToastNotifications.Messages;
 
 namespace Weather_forecast.Components.Table
 {
@@ -30,7 +31,8 @@ namespace Weather_forecast.Components.Table
         public ObservableCollection<LocationDailyWeather> LocationDaylyForecasts { get; set; }
         private static string[] graphParameters = { "Temperature", "Pressure", "Visibility", "Humidity" };
         private static string[] forecastRange = { "One day", "Three days", "Five days" };
-       
+
+        private CustomNotifier customNotifier = new CustomNotifier(10,10);
         private bool _isMessageVisible;
         private DispatcherTimer messageTimer = MainWindow.messageTimer;
         private bool IsMessageVisible
@@ -54,7 +56,7 @@ namespace Weather_forecast.Components.Table
             initializeTableRows();
             initializeAllComponents();
             InitializeComponent();
-            
+
             setComponentsValues();
             drawChart();
         }
@@ -63,7 +65,7 @@ namespace Weather_forecast.Components.Table
         {
             PropertyDescriptor propertyDescriptor = (PropertyDescriptor)e.PropertyDescriptor;
             e.Column.Header = propertyDescriptor.DisplayName;
-            if (propertyDescriptor.DisplayName == "Kelvin" || propertyDescriptor.DisplayName == "Icon" || propertyDescriptor.DisplayName == "StringIcon")
+            if (propertyDescriptor.DisplayName == "Icon" || propertyDescriptor.DisplayName == "StringIcon")
             {
                 e.Cancel = true;
             }
@@ -105,12 +107,11 @@ namespace Weather_forecast.Components.Table
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
-        {
-            
+        { 
             graphType.ItemsSource = null;
             graphType.ItemsSource = graphParameters;
 
-            initializeTableRows();
+            applyNumOfDaysFilter();
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -119,6 +120,8 @@ namespace Weather_forecast.Components.Table
 
             if (citiesList.Count != 0)
             {
+                setChartComponents();
+
                 string cityName = "";
                 foreach (string city in citiesList)
                 {
@@ -141,15 +144,16 @@ namespace Weather_forecast.Components.Table
                 {
                     message = "Cities are";
                 }
-
-                drawChart();
-                messageInformation.Content = $"{message} successfully removed!";
-                IsMessageVisible = true;
+                setAxesLabels("", "");
+                customNotifier.notifier.ShowSuccess($"{message} successfully removed!");
+                if (chartView.Series != null)
+                    chartView.Series.Clear();
+                setLastAddedCityAsSelected();
+                setDefaultGraphParameter();
             }
             else
             {
-                messageInformation.Content = "You did not choose city to delete!";
-                IsMessageVisible = true;
+                customNotifier.notifier.ShowError("You did not choose city to delete!");
             }
         }
 
@@ -168,6 +172,7 @@ namespace Weather_forecast.Components.Table
             }
             else
             {
+                expanderFilter.Background = null;
                 expanderFilter.BorderBrush = null;
             }
         }
@@ -216,15 +221,14 @@ namespace Weather_forecast.Components.Table
             if (from != null)
                 LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => from <= i.Time));
             if(to != null)
-                LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Time <= to)); 
-            if(from != null && to != null && from > to)
-                messageInformation.Content = "You have selected invalid values ​​for filtering!";
-                IsMessageVisible = true;
+                LocationDaylyForecasts = new ObservableCollection<LocationDailyWeather>(LocationDaylyForecasts.Where(i => i.Time <= to));
+            if (from != null && to != null && from > to)
+                customNotifier.notifier.ShowError("You have selected invalid values ​​for filtering!");
 
             return LocationDaylyForecasts;
         }
 
-        private void applyNumOfDaysFilter()
+        public void applyNumOfDaysFilter()
         { 
             setTableRows(numberOfDays());
         }
@@ -308,7 +312,8 @@ namespace Weather_forecast.Components.Table
         {
             try
             {
-                listBox.SelectedItem = MainWindow.forecast.getAllCities().Last();
+                if(listBox.SelectedItems != null)
+                    listBox.SelectedItem = MainWindow.forecast.getAllCities().Last();
             }
             catch
             { }
@@ -317,7 +322,8 @@ namespace Weather_forecast.Components.Table
         
         public void setDefaultGraphParameter()
         {
-            graphType.SelectedItem = graphParameters[0];
+            if(graphType.SelectedItem == null)
+                graphType.SelectedItem = graphParameters[0];
         }
 
         public void setChartComponents()
@@ -330,13 +336,12 @@ namespace Weather_forecast.Components.Table
 
             if (graphDataType == "" || graphDataType == null)
             {
-                messageInformation.Content = "You did not choose parameters for graph view!";
-                IsMessageVisible = true;
+                customNotifier.notifier.ShowError("You did not choose parameters for graph view!");
             }
-            else if (listBoxItems.Count == 0)
+            else if (listBoxItems.Count == 0 && this.IsLoaded)
             {
-                messageInformation.Content = "You did not choose city for graph view!";
-                IsMessageVisible = true;
+                setAxesLabels("", "");
+                customNotifier.notifier.ShowError("You did not choose city for graph view!");
             }
             else
             {
@@ -393,14 +398,15 @@ namespace Weather_forecast.Components.Table
 
             return 40;
         }
-
+        
         /*
             Chart view
          */
         public void setComponents(string chartData, string[] cities)
         {
             chartView.Series.Clear();
-            setAxesLabels("Forecast during days", $"City {adjustAttributeName(chartData).ToLower()}");
+            string daysMessage = daysNumber.SelectedItem != null ? (daysNumber.SelectedItem as string).ToLower() : "five days";
+            setAxesLabels($"Forecast during {daysMessage}", $"City {adjustAttributeName(chartData).ToLower()}");
 
             foreach (string city in cities)
             {
@@ -419,7 +425,7 @@ namespace Weather_forecast.Components.Table
         private KeyValuePair<string, double>[] getAllKeyValuePairs(LocationForecast locationForecast, string graphData)
         {
            return locationForecast.ForecastDict
-                                        .Select(pair => new KeyValuePair<string, double>(pair.Key.ToString("ddd h tt"), getAttributeValueByName(graphData, pair.Value)))
+                                        .Select(pair => new KeyValuePair<string, double>(pair.Key.ToString("ddd dd/MM h tt"), getAttributeValueByName(graphData, pair.Value)))
                                         .ToArray();
         }
 
@@ -427,7 +433,7 @@ namespace Weather_forecast.Components.Table
         {
             int maxNum = geMaxNum();
             int interval = getInterval();
-            KeyValuePair<string, double>[] retVal = new KeyValuePair<string, double>[maxNum];
+            List<KeyValuePair<string, double>> retVal = new List<KeyValuePair<string, double>>();
 
             int cnt = 0;
             int addedNumber = 0;
@@ -435,12 +441,13 @@ namespace Weather_forecast.Components.Table
             {
                if (cnt++ % interval == 0)
                 {
-                    retVal[addedNumber++] = new KeyValuePair<string, double>(pair.Key.ToString("ddd h tt"), getAttributeValueByName(graphData, pair.Value));
+                    retVal.Add(new KeyValuePair<string, double>(pair.Key.ToString("ddd dd/MM h tt"), getAttributeValueByName(graphData, pair.Value)));
+                    addedNumber++;
                 }
                 if (addedNumber == maxNum - 1) break;
 
             }
-            return retVal;
+            return retVal.ToArray();
         }
 
         private int geMaxNum()
@@ -466,7 +473,7 @@ namespace Weather_forecast.Components.Table
             {
                 retVal = 1;
             }
-            else if (daysNum == 1)
+            else if (daysNum == 3)
             {
                 retVal = 3;
             }
@@ -526,40 +533,8 @@ namespace Weather_forecast.Components.Table
             xAxesLabel.Content = xAxesName;
             yAxesLabel.Content = yAxesName;
         }
-        
-        private int setChartInterval(int daysNum)
-        {
 
-            int retVal = 0;
-            if (daysNum == 1)
-            {
-                retVal = daysNum;
-            }
-            else 
-            {
-                retVal = 3;
-            }
-
-            return retVal;
-        }
-    
-        private int xAxesSize()
-        {
-            int daysNum = getDaysNum();
-            int retVal = 0;
-            if(daysNum == 1 || daysNum == 3)
-            {
-                retVal = daysNum * 9;
-            }
-            else
-            {
-                retVal = 40;
-            }
-
-            return retVal;
-        }
-
-        private void drawChart()
+        public void drawChart()
         {
             if (chartView.Series != null)
                 chartView.Series.Clear();

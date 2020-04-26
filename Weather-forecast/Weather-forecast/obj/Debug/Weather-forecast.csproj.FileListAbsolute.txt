@@ -83,3 +83,6 @@ C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\
 C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.csproj.CopyComplete
 C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.exe
 C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\Weather-forecast.pdb
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\ToastNotifications.dll
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\bin\Debug\ToastNotifications.Messages.dll
+C:\Users\nikol\Desktop\a\weather-forecast\Weather-forecast\Weather-forecast\obj\Debug\App.baml

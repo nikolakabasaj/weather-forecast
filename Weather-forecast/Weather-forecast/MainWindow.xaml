@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="Current location weather" Height="450" Width="800" Background="#FF593535">
 
-
     <Grid x:Name="MainGrid"  x:FieldModifier="public" Margin="-4,1,0.6,0">
         <Grid.Background>
             <ImageBrush ImageSource="/Images/sky.jpg" Stretch="UniformToFill"/>
@@ -38,7 +37,7 @@
         <Canvas Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="6" Margin="0,0,0.4,0">
             <TextBox x:Name="searchText" Grid.Column="5" Grid.Row="1" Width="150" Canvas.Left="585" Canvas.Top="10" Background="#FF826D6D" BorderThickness="1" RenderTransformOrigin="0.488,0.534" Height="25"/>
             <Popup x:Name="searchPopup" Height="45" Width="45" Canvas.Left="-15">
-                <TextBlock x:Name="messagePopup" Margin="-15,-20,14.8,19.8" ></TextBlock>
+                <TextBlock x:Name="messagePopup" Margin="-15,-20,14.8,19.8"></TextBlock>
             </Popup>
             <Button x:Name="searchButton" Click="searchButton_Click"
                     Grid.Column="6" Grid.Row="1" RenderTransformOrigin="11.739,0.697" Canvas.Left="735" Canvas.Top="10" Background="#FF827979" Foreground="White" Height="25" Width="25" BorderBrush="#FFBAB6B6">

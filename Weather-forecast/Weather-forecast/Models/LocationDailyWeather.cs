@@ -16,8 +16,8 @@ namespace Weather_forecast.Models
     {
         public string Name { get; set; }
         public DateTime Time { get; set; }
-        public double Kelvin { get; set; }
         public double Celsius { get; set; }
+        public double Kelvin { get; set; }
 
         [DisplayName("MIN temp")]
         public double Temp_min { get; set; }

@@ -16,12 +16,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 using Weather_forecast.Components.Table;
 using Weather_forecast.JSONMapper;
 using Weather_forecast.JSONModels.Current_forecast;
 using Weather_forecast.Models;
 using Weather_forecast.Utility;
 using Weather_forecast.Web_mapping;
+
 
 namespace Weather_forecast
 {
@@ -39,6 +44,7 @@ namespace Weather_forecast
         private static string currentCityName = currCity.CityName;   
         private static CurrentWeather currentCityWeather = forecast.getCurrentWeather(currentCityName);
 
+        private CustomNotifier customNotifier = new CustomNotifier(260, 10);
         public static DispatcherTimer messageTimer = new DispatcherTimer();
         private bool _informationMessage;
         private bool InformationMessage
@@ -55,13 +61,15 @@ namespace Weather_forecast
             }
         }
 
+        /*
+         * Notifier
+        */
 
         public MainWindow()
         {
             InitializeComponent();
             setInitialHomePage();
         }
-
         /*
             Event handlers 
         */
@@ -69,14 +77,13 @@ namespace Weather_forecast
         {
             if (forecast.locationForecast.Count != 0)
             {   
-                if(table == null)
+                if(table == null || !table.IsLoaded)
                     table = new TableView();
                     table.Show();
             }
             else
             {
-                informationLabel.Content = "There is no data in table!";
-                InformationMessage = true;
+                customNotifier.notifier.ShowError("There is no data in table!");
             }  
         }
 
@@ -89,10 +96,10 @@ namespace Weather_forecast
 
             if (table != null)
             {
-                table.setComponentsValues();
-                table.setLastAddedCityAsSelected();
-                table.setDefaultGraphParameter();
-                table.setChartComponents();
+                table.LocationDaylyForecasts.Clear();
+                table.applyNumOfDaysFilter();
+
+                table.drawChart();
             }      
         }
 
@@ -163,29 +170,21 @@ namespace Weather_forecast
                     table.initializeTableRows();
                     table.fillListBox();
                 }
-
-                informationLabel.Content = $"The city {StringHandler.capitalize(lf.Name )} was added to the table!";
+                customNotifier.notifier.ShowSuccess($"The city {StringHandler.capitalize(lf.Name)} was added to the table!");
             }
             catch
             {
                 if (cityName == "")
                 {
-                    informationLabel.Content = "You did not enter a city name!";
+                    customNotifier.notifier.ShowWarning("You did not enter a city name!");
                 }
                 else
                 {
-                    informationLabel.Content = $"City '{StringHandler.capitalize(cityName)}' does not exist!";
+                    customNotifier.notifier.ShowWarning( $"City '{StringHandler.capitalize(cityName)}' does not exist!");
                 }
 
             }
             searchText.Clear();
-            InformationMessage = true;
-        }
-
-        private int daysNum()
-        {
-            int index = table.daysNumber.SelectedIndex;
-            return index + 1;
         }
 
         /*
